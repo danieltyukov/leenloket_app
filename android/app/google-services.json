@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "1039865739935",
+    "firebase_url": "https://tue-leenloket-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "tue-leenloket",
+    "storage_bucket": "tue-leenloket.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039865739935:android:bc6cd49534a74add2080aa",
+        "android_client_info": {
+          "package_name": "com.example.leenloket_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBl4ViK8bFd2QZdCn6h_CP6qrnHw_Jpz0g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
