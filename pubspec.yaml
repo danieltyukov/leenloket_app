@@ -10,11 +10,13 @@ environment:
   sdk: '>=3.2.0 <4.0.0'
 
 dependencies:
+  fan_carousel_image_slider: ^0.1.2
   firebase_core: ^2.23.0
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  flutter_profile_picture: ^2.0.0
 
 dev_dependencies:
   flutter_test:
