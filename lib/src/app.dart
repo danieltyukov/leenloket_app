@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:leenloket_app/src/authentication/auth__login_view.dart';
 import 'package:leenloket_app/src/home/home_view.dart';
 import 'package:leenloket_app/src/reserving/reserving__item__overview_view.dart';
 
@@ -79,7 +80,7 @@ class MyApp extends StatelessWidget {
                     return const ReservingItemOverviewView();
                   case SampleItemListView.routeName:
                   default:
-                    return const HomeView();
+                    return const AuthLoginView();
                 }
               },
             );

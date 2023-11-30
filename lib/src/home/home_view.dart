@@ -14,7 +14,7 @@ class HomeView extends StatelessWidget {
 
   final List<SampleItem> items;
 
-  static const routeName = '/';
+  static const routeName = '/home';
 
   @override
   Widget build(BuildContext context) {
