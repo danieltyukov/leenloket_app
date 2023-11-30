@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:leenloket_app/src/home/home_view.dart';
+import 'package:leenloket_app/src/reserving/reserving__item__overview_view.dart';
 
-import 'sample_feature/sample_item_details_view.dart';
-import 'sample_feature/sample_item_list_view.dart';
+import 'shop/shop__item__single_view.dart';
+import 'shop/shop__index_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
@@ -74,6 +75,8 @@ class MyApp extends StatelessWidget {
                     return const SampleItemDetailsView();
                   case HomeView.routeName:
                     return const HomeView();
+                  case ReservingItemOverviewView.routeName:
+                    return const ReservingItemOverviewView();
                   case SampleItemListView.routeName:
                   default:
                     return const HomeView();

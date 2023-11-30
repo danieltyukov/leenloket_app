@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-import 'package:leenloket_app/src/sample_feature/sample_item.dart';
+import 'package:leenloket_app/src/models/sample_item.dart';
 
-import '../sample_feature/sample_item_details_view.dart';
+import '../shop/shop__item__single_view.dart';
 import '../settings/settings_view.dart';
 
 /// Displays a list of SampleItems.

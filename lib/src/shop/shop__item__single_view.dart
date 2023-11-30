@@ -1,5 +1,6 @@
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:leenloket_app/src/reserving/reserving__item__overview_view.dart';
 
 /// Displays detailed information about a SampleItem.
 class SampleItemDetailsView extends StatelessWidget {
@@ -87,7 +88,10 @@ class SampleItemDetailsView extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.restorablePushNamed(context,
+                                    ReservingItemOverviewView.routeName);
+                              },
                               child: const Text("Rent this item"),
                             )
                           ],
