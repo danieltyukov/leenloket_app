@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:leenloket_app/src/authentication/auth__login_view.dart';
+import 'package:leenloket_app/src/home/admin__home_view.dart';
 import 'package:leenloket_app/src/home/home_view.dart';
 import 'package:leenloket_app/src/reserving/reserving__item__overview_view.dart';
+import 'package:leenloket_app/src/roles/role__selector_view.dart';
 
 import 'shop/shop__item__single_view.dart';
 import 'shop/shop__index_view.dart';
@@ -70,15 +72,36 @@ class MyApp extends StatelessWidget {
               settings: routeSettings,
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
+                  //Admin routes
+                  case AdminHomeView.routeName:
+                    return const AdminHomeView();
+
+                  // Authentication routes
+                  case AuthLoginView.routeName:
+                    return const AuthLoginView();
+
+                  // Role routes
+                  case RoleSelectorView.routeName:
+                    return const RoleSelectorView();
+
+                  // Settings routes
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
-                  case SampleItemDetailsView.routeName:
-                    return const SampleItemDetailsView();
+
+                  // Home routes
                   case HomeView.routeName:
                     return const HomeView();
+
+                  // Reserving routes
                   case ReservingItemOverviewView.routeName:
                     return const ReservingItemOverviewView();
+
+                  // Shop routes
                   case SampleItemListView.routeName:
+                  case SampleItemDetailsView.routeName:
+                    return const SampleItemDetailsView();
+
+                  // Default route
                   default:
                     return const AuthLoginView();
                 }

@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:leenloket_app/src/roles/role__selector_view.dart';
 
 class AuthLoginView extends StatelessWidget {
   const AuthLoginView({super.key});
@@ -8,23 +11,41 @@ class AuthLoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Text(
-              'Welcome to the Login Page!',
-              style: TextStyle(fontSize: 20),
+              'Login',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 32),
+            const TextField(
+              decoration: InputDecoration(
+                labelText: 'Email',
+              ),
+            ),
+            const SizedBox(height: 16),
+            const TextField(
+              decoration: InputDecoration(
+                labelText: 'Password',
+              ),
+            ),
+            const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {
-                // TODO: Implement login functionality
+                Navigator.of(context).pushNamed(RoleSelectorView.routeName);
               },
-              child: Text('Login'),
+              child: const Text('Login'),
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () async {},
+              child: const Text('Login with Google'),
             ),
           ],
         ),

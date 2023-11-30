@@ -24,6 +24,7 @@ dependencies:
   # -- FIREBASE PACKAES
   firebase_core: ^2.23.0
   google_sign_in: ^6.1.6
+  firebase_auth: ^4.15.0
 
 dev_dependencies:
   flutter_test:
