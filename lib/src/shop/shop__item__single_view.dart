@@ -78,7 +78,6 @@ class SampleItemDetailsView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             ElevatedButton(
-                              child: Text("Rent this item"),
                               style: ElevatedButton.styleFrom(
                                 foregroundColor: Colors.white,
                                 backgroundColor: Colors.red,
@@ -89,6 +88,7 @@ class SampleItemDetailsView extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {},
+                              child: const Text("Rent this item"),
                             )
                           ],
                         )
