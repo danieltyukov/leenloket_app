@@ -1,86 +1,46 @@
 import 'package:flutter/material.dart';
+import 'package:leenloket_app/src/admin/admin__items__overview.dart';
+import 'package:leenloket_app/src/widgets/customButton.dart';
 
-class AdminHomeView extends StatelessWidget {
-  const AdminHomeView({super.key});
+class AdminHomeView extends StatefulWidget {
+  const AdminHomeView({Key? key}) : super(key: key);
 
-  static const routeName = '/admin/home';
+  static const routeName = '/admin';
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Admin Home'),
-      ),
-      body: GridView.count(
-        crossAxisCount: 2,
-        children: [
-          CustomButton(
-            title: 'Add item',
-            color: Colors.orange,
-            onPressed: () {
-              // TODO: Implement button 1 functionality
-            },
-          ),
-          CustomButton(
-            title: 'See all items',
-            color: Colors.red,
-            onPressed: () {
-              // TODO: Implement button 2 functionality
-            },
-          ),
-          CustomButton(
-            title: 'See all bookings',
-            color: Colors.green,
-            onPressed: () {
-              // TODO: Implement button 3 functionality
-            },
-          ),
-          CustomButton(
-            title: 'See all lockers',
-            color: Colors.blue,
-            onPressed: () {
-              // TODO: Implement button 4 functionality
-            },
-          ),
-        ],
-      ),
-    );
-  }
+  State<AdminHomeView> createState() => _AdminHomeViewState();
 }
 
-class CustomButton extends StatelessWidget {
-  final String title;
-  final VoidCallback onPressed;
-  final Color color;
-
-  const CustomButton({
-    super.key,
-    required this.title,
-    required this.onPressed,
-    required this.color,
-  });
+class _AdminHomeViewState extends State<AdminHomeView> {
+  final descriptionController = TextEditingController();
+  final categoryController = TextEditingController();
+  final lockerController = TextEditingController();
+  final itemIDController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        margin: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(8),
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Admin Home'),
         ),
-        child: Center(
-          child: Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+        body: GridView.count(
+          crossAxisCount: 2,
+          children: [
+            CustomButton(
+              title: 'Items',
+              color: Colors.orange,
+              onPressed: () {
+                Navigator.restorablePushNamed(
+                    context, AdminCreateItem.routeName);
+              },
             ),
-          ),
+            CustomButton(
+              title: 'Reservations',
+              color: Colors.red,
+              onPressed: () {
+                // TODO: Implement button 2 functionality
+              },
+            ),
+          ],
         ),
-      ),
-    );
-  }
+      );
 }

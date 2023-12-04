@@ -12,7 +12,12 @@ class ReservingItemOverviewView extends StatelessWidget {
           title: const Text('Overview Reservation'),
         ),
         body: const Column(
-          children: [Text("Overview Reservation")],
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              decoration: InputDecoration(helperText: "Name"),
+            ),
+          ],
         ));
   }
 }
