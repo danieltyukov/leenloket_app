@@ -43,6 +43,7 @@ class _AdminCreateItemState extends State<AdminCreateItem> {
                             ),
                             TextField(
                               controller: itemIDController,
+                              keyboardType: TextInputType.number,
                               decoration:
                                   const InputDecoration(helperText: "Item ID"),
                             ),
@@ -53,11 +54,13 @@ class _AdminCreateItemState extends State<AdminCreateItem> {
                             ),
                             TextField(
                               controller: categoryController,
+                              keyboardType: TextInputType.number,
                               decoration:
                                   const InputDecoration(helperText: "Category"),
                             ),
                             TextField(
                               controller: lockerController,
+                              keyboardType: TextInputType.number,
                               decoration: const InputDecoration(
                                   helperText: "Locker ID"),
                             ),
@@ -70,11 +73,13 @@ class _AdminCreateItemState extends State<AdminCreateItem> {
                                       FirebaseDatabase.instance.ref();
 
                                   Map<String, dynamic> data = {
-                                    "itemID": itemIDController.value,
+                                    "itemID": itemIDController.value.toString(),
                                     "description":
                                         descriptionController.value.toString(),
-                                    "categoryID": categoryController.value,
-                                    "lockerID": lockerController.value,
+                                    "categoryID":
+                                        categoryController.value.toString(),
+                                    "lockerID":
+                                        lockerController.value.toString(),
                                     "status": "Available"
                                   };
 

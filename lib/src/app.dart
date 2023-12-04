@@ -1,8 +1,10 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:leenloket_app/src/admin/admin__items__index.dart';
 import 'package:leenloket_app/src/admin/admin__items__overview.dart';
+import 'package:leenloket_app/src/admin/admin__items__single.dart';
 import 'package:leenloket_app/src/authentication/auth__login_view.dart';
 import 'package:leenloket_app/src/home/admin__home_view.dart';
 import 'package:leenloket_app/src/home/home_view.dart';
@@ -81,6 +83,8 @@ class MyApp extends StatelessWidget {
                     return const AdminCreateItem();
                   case AdminIndexItems.routeName:
                     return const AdminIndexItems();
+                  case AdminItemSingleView.routeName:
+                    return const AdminItemSingleView();
 
                   // Authentication routes
                   case AuthLoginView.routeName:
