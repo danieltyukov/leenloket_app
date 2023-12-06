@@ -1,9 +1,18 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:leenloket_app/src/admin/admin__items__index.dart';
+import 'package:leenloket_app/src/admin/admin__items__overview.dart';
+import 'package:leenloket_app/src/admin/admin__items__single.dart';
+import 'package:leenloket_app/src/authentication/auth__login_view.dart';
+import 'package:leenloket_app/src/home/admin__home_view.dart';
+import 'package:leenloket_app/src/home/home_view.dart';
+import 'package:leenloket_app/src/reserving/reserving__item__overview_view.dart';
+import 'package:leenloket_app/src/roles/role__selector_view.dart';
 
-import 'sample_feature/sample_item_details_view.dart';
-import 'sample_feature/sample_item_list_view.dart';
+import 'shop/shop__item__single_view.dart';
+import 'shop/shop__index_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
@@ -67,13 +76,44 @@ class MyApp extends StatelessWidget {
               settings: routeSettings,
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
+                  //Admin routes
+                  case AdminHomeView.routeName:
+                    return const AdminHomeView();
+                  case AdminCreateItem.routeName:
+                    return const AdminCreateItem();
+                  case AdminIndexItems.routeName:
+                    return const AdminIndexItems();
+                  case AdminItemSingleView.routeName:
+                    return const AdminItemSingleView();
+
+                  // Authentication routes
+                  case AuthLoginView.routeName:
+                    return const AuthLoginView();
+
+                  // Role routes
+                  case RoleSelectorView.routeName:
+                    return const RoleSelectorView();
+
+                  // Settings routes
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
+
+                  // Home routes
+                  case HomeView.routeName:
+                    return const HomeView();
+
+                  // Reserving routes
+                  case ReservingItemOverviewView.routeName:
+                    return const ReservingItemOverviewView();
+
+                  // Shop routes
+                  case SampleItemListView.routeName:
                   case SampleItemDetailsView.routeName:
                     return const SampleItemDetailsView();
-                  case SampleItemListView.routeName:
+
+                  // Default route
                   default:
-                    return const SampleItemListView();
+                    return const AuthLoginView();
                 }
               },
             );
