@@ -49,6 +49,11 @@ class AuthLoginView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Image(
+              image: AssetImage('assets/images/citywalk.jpg'),
+              width: 128,
+            ),
+            const SizedBox(height: 32),
             const Text(
               'Login',
               style: TextStyle(

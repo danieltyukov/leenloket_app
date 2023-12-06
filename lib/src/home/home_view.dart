@@ -1,12 +1,13 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:leenloket_app/src/models/sample_item.dart';
-
-import '../shop/shop__item__single_view.dart';
+import 'package:leenloket_app/src/shop/shop__item__single_view.dart';
 import '../settings/settings_view.dart';
 
 /// Displays a list of SampleItems.
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({
     super.key,
     this.items = const [SampleItem(1), SampleItem(2), SampleItem(3)],
@@ -15,6 +16,13 @@ class HomeView extends StatelessWidget {
   final List<SampleItem> items;
 
   static const routeName = '/home';
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  final ref = FirebaseDatabase.instance.ref('Items');
 
   @override
   Widget build(BuildContext context) {
@@ -61,59 +69,28 @@ class HomeView extends StatelessWidget {
                 Container(
                   color: Colors.transparent,
                   height: 250,
-                  child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: items.length,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        return Container(
-                            width: 150,
-                            height: 180,
-                            margin: EdgeInsets.only(right: 15),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 180,
-                                  width: 150,
-                                  child: Stack(
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          // Navigate to the details page. If the user leaves and returns to
-                                          // the app after it has been killed while running in the
-                                          // background, the navigation stack is restored.
-                                          Navigator.restorablePushNamed(
-                                            context,
-                                            SampleItemDetailsView.routeName,
-                                          );
-                                        },
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                          child: Image.asset(
-                                            'assets/images/drill.jpg',
-                                            fit: BoxFit.cover,
-                                            height: 180,
-                                            width: 150,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(height: 10),
-                                const Text(
-                                  "Drill",
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                )
-                              ],
-                            ));
-                      }),
+                  child: FirebaseAnimatedList(
+                    query: ref,
+                    itemBuilder: (context, snapshot, animation, index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  const SampleItemDetailsView()));
+                        },
+                        child: Card(
+                          child: ListTile(
+                            title: Text(
+                                snapshot.child('Description').value.toString()),
+                            subtitle:
+                                Text("ID: ${snapshot.child('ItemID').value}"),
+                            trailing:
+                                Text(snapshot.child('Status').value.toString()),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
                 )
               ],
             ),

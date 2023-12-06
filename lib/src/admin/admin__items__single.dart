@@ -1,9 +1,10 @@
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class AdminItemSingleView extends StatefulWidget {
-  const AdminItemSingleView({Key? key}) : super(key: key);
+  final String itemId;
+
+  const AdminItemSingleView({Key? key, required this.itemId}) : super(key: key);
 
   static const routeName = '/admin/items/single';
 
@@ -12,21 +13,47 @@ class AdminItemSingleView extends StatefulWidget {
 }
 
 class _AdminItemSingleViewState extends State<AdminItemSingleView> {
-  final ref = FirebaseDatabase.instance.ref('Items');
+  late DatabaseReference _itemRef;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize DatabaseReference for the specific item
+    _itemRef = FirebaseDatabase.instance.ref('Items/${widget.itemId}');
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-      appBar: AppBar(
-        title: const Text('Single'),
-      ),
-      body: FirebaseAnimatedList(
-        query: ref,
-        itemBuilder: (context, snapshot, animation, index) {
-          return Card(
-            child: ListTile(
-              title: Text(snapshot.child('Status').value.toString()),
-            ),
-          );
-        },
-      ));
+        appBar: AppBar(
+          title: const Text('Details'),
+        ),
+        body: FutureBuilder<DatabaseEvent>(
+          future: _fetchItemDetails(),
+          builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || snapshot.data == null) {
+              return const Text('Data not available');
+            } else {
+              DataSnapshot itemSnapshot = snapshot.data!.snapshot;
+              // Display details for the specific item
+              return Card(
+                child: ListTile(
+                  title:
+                      Text(itemSnapshot.child('Description').value.toString()),
+                  subtitle: Text("ID: ${itemSnapshot.child('ItemID').value}"),
+                  trailing: Text(itemSnapshot.child('Status').value.toString()),
+                  // Add more details or widgets as needed
+                ),
+              );
+            }
+          },
+        ),
+      );
+
+  Future<DatabaseEvent> _fetchItemDetails() async {
+    return await _itemRef.once();
+  }
 }

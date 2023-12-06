@@ -27,7 +27,8 @@ class _AdminIndexItems extends State<AdminIndexItems> {
           return GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const AdminItemSingleView()));
+                  builder: (context) =>
+                      AdminItemSingleView(itemId: snapshot.key!)));
             },
             child: Card(
               child: ListTile(

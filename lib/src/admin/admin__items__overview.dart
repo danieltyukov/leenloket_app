@@ -72,19 +72,48 @@ class _AdminCreateItemState extends State<AdminCreateItem> {
                                   DatabaseReference dbRef =
                                       FirebaseDatabase.instance.ref();
 
-                                  Map<String, dynamic> data = {
-                                    "itemID": itemIDController.value.toString(),
-                                    "description":
-                                        descriptionController.value.toString(),
-                                    "categoryID":
-                                        categoryController.value.toString(),
-                                    "lockerID":
-                                        lockerController.value.toString(),
-                                    "status": "Available"
-                                  };
+                                  try {
+                                    int itemID =
+                                        int.parse(itemIDController.value.text);
+                                    String description =
+                                        descriptionController.value.text;
+                                    int categoryID = int.parse(
+                                        categoryController.value.text);
+                                    int lockerID =
+                                        int.parse(lockerController.value.text);
 
-                                  dbRef.child('Items').push().set(data).then(
-                                      (value) => Navigator.of(context).pop());
+                                    Map<String, dynamic> data = {
+                                      "itemID": itemID,
+                                      "description": description,
+                                      "categoryID": categoryID,
+                                      "lockerID": lockerID,
+                                      "status": "Available"
+                                    };
+
+                                    dbRef.child('Items').push().set(data).then(
+                                        (value) => Navigator.of(context).pop());
+                                  } catch (e) {
+                                    // Handle parsing errors, for example, show an error message
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text('Error'),
+                                          content: const Text(
+                                              'Invalid input. Please enter valid numeric values.'),
+                                          actions: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context)
+                                                    .pop(); // Close the error dialog
+                                              },
+                                              child: const Text('OK'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
                                 },
                                 child: const Text("Add item"))
                           ]),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:leenloket_app/src/admin/Categories/admin__categories__index.dart';
 import 'package:leenloket_app/src/admin/admin__items__overview.dart';
+import 'package:leenloket_app/src/admin/lockers/admin__lockers__index.dart';
+import 'package:leenloket_app/src/admin/reservations/admin__reservations__index.dart';
 import 'package:leenloket_app/src/widgets/customButton.dart';
 
 class AdminHomeView extends StatefulWidget {
@@ -37,7 +40,24 @@ class _AdminHomeViewState extends State<AdminHomeView> {
               title: 'Reservations',
               color: Colors.red,
               onPressed: () {
-                // TODO: Implement button 2 functionality
+                Navigator.restorablePushNamed(
+                    context, AdminReservationsIndex.routeName);
+              },
+            ),
+            CustomButton(
+              title: 'Categories',
+              color: Colors.green,
+              onPressed: () {
+                Navigator.restorablePushNamed(
+                    context, AdimCategoriesIndex.routeName);
+              },
+            ),
+            CustomButton(
+              title: 'Lockers',
+              color: Colors.blue,
+              onPressed: () {
+                Navigator.restorablePushNamed(
+                    context, AdminLockersIndex.routeName);
               },
             ),
           ],
