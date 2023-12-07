@@ -23,21 +23,6 @@ class _SampleItemListViewState extends State<SampleItemListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sample Items'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              // Navigate to the settings page. If the user leaves and returns
-              // to the app after it has been killed while running in the
-              // background, the navigation stack is restored.
-              Navigator.restorablePushNamed(context, SettingsView.routeName);
-            },
-          ),
-        ],
-      ),
-
       // To work with lists that may contain a large number of items, it’s best
       // to use the ListView.builder constructor.
       //
@@ -45,6 +30,7 @@ class _SampleItemListViewState extends State<SampleItemListView> {
       // building all Widgets up front, the ListView.builder constructor lazily
       // builds Widgets as they’re scrolled into view.
       body: FirebaseAnimatedList(
+        padding: const EdgeInsets.all(15),
         query: ref,
         itemBuilder: (context, snapshot, animation, index) {
           return GestureDetector(
