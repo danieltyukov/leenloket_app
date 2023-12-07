@@ -4,7 +4,7 @@ import 'package:firebase_database/firebase_database.dart';
 class AdminItemSingleView extends StatefulWidget {
   final String itemId;
 
-  const AdminItemSingleView({Key? key, required this.itemId}) : super(key: key);
+  const AdminItemSingleView({super.key, required this.itemId});
 
   static const routeName = '/admin/items/single';
 

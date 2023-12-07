@@ -97,7 +97,6 @@ class MyApp extends StatelessWidget {
                       // Handle missing or invalid arguments
                       return const SizedBox.shrink();
                     }
-                    ;
 
                   case AdminReservationsIndex.routeName:
                     return const AdminReservationsIndex();
@@ -126,12 +125,22 @@ class MyApp extends StatelessWidget {
 
                   // Reserving routes
                   case ReservingItemOverviewView.routeName:
-                    return const ReservingItemOverviewView();
+                    return ReservingItemOverviewView();
 
                   // Shop routes
                   case SampleItemListView.routeName:
-                  case SampleItemDetailsView.routeName:
-                    return const SampleItemDetailsView();
+                  case ShopItemSingleView.routeName:
+                    // Extract itemId from route arguments
+                    final Map<String, dynamic>? args =
+                        routeSettings.arguments as Map<String, dynamic>?;
+
+                    if (args != null && args.containsKey('itemId')) {
+                      final String itemId = args['itemId'] as String;
+                      return ShopItemSingleView(itemId: itemId);
+                    } else {
+                      // Handle missing or invalid arguments
+                      return const SizedBox.shrink();
+                    }
 
                   // Default route
                   default:

@@ -50,7 +50,8 @@ class _SampleItemListViewState extends State<SampleItemListView> {
           return GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => SampleItemDetailsView()));
+                  builder: (context) =>
+                      ShopItemSingleView(itemId: snapshot.key!)));
             },
             child: Card(
               child: ListTile(

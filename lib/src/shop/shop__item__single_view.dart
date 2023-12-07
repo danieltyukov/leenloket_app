@@ -1,102 +1,141 @@
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:leenloket_app/src/reserving/reserving__item__overview_view.dart';
 
 /// Displays detailed information about a SampleItem.
-class SampleItemDetailsView extends StatelessWidget {
-  const SampleItemDetailsView({super.key});
+class ShopItemSingleView extends StatefulWidget {
+  final String itemId;
 
-  static const routeName = '/sample_item';
+  const ShopItemSingleView({super.key, required this.itemId});
+
+  static const routeName = '/shop/items/single';
+  @override
+  State<ShopItemSingleView> createState() => _ShopItemSingleView();
+}
+
+class _ShopItemSingleView extends State<ShopItemSingleView> {
+  late DatabaseReference _itemRef;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize DatabaseReference for the specific item
+    _itemRef = FirebaseDatabase.instance.ref('Items/${widget.itemId}');
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Item Details'),
-        ),
-        body: SingleChildScrollView(
-          child: SafeArea(
-              child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 350,
-                          width: MediaQuery.of(context).size.width,
-                          child: FanCarouselImageSlider(
-                              sliderHeight: 300,
-                              autoPlay: true,
-                              imagesLink: const [
-                                'assets/images/drill.jpg',
-                                'assets/images/drill.jpg',
-                                'assets/images/drill.jpg'
-                              ],
-                              isAssets: true),
-                        ),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      appBar: AppBar(
+        title: const Text('Item Details'),
+      ),
+      body: FutureBuilder<DatabaseEvent>(
+        future: _fetchItemDetails(),
+        builder: (context, AsyncSnapshot<DatabaseEvent> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data == null) {
+            return const Text('Data not available');
+          } else {
+            DataSnapshot itemSnapshot = snapshot.data!.snapshot;
+            // Display details for the specific item
+            return SingleChildScrollView(
+              child: SafeArea(
+                  child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            SizedBox(
+                              height: 350,
+                              width: MediaQuery.of(context).size.width,
+                              child: FanCarouselImageSlider(
+                                  sliderHeight: 300,
+                                  autoPlay: true,
+                                  imagesLink: const [
+                                    'assets/images/drill.jpg',
+                                    'assets/images/drill.jpg',
+                                    'assets/images/drill.jpg'
+                                  ],
+                                  isAssets: true),
+                            ),
+                            const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(height: 30),
-                                Text("Drill",
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(height: 30),
+                                    Text("Drill",
+                                        style: TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold)),
+                                    SizedBox(height: 5),
+                                    Text("Tools",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.black54,
+                                            fontWeight: FontWeight.w500))
+                                  ],
+                                ),
+                                Text("€15",
                                     style: TextStyle(
                                         fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
-                                SizedBox(height: 5),
-                                Text("Tools",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.w500))
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red))
                               ],
                             ),
-                            Text("€15",
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red))
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                                "A nice drill to drill holes in your wall. It is very good and it is very cheap. You can use it for many things. It is very good and it is very cheap. You can use it for many things. It is very good and it is very cheap. You can use it for many things. It is very good and it is very cheap. You can use it for many things. It is very good and it is very cheap. You can use it for many things. It is very good and it is very cheap. You can use it for many things. It is very good and it is very cheap. You can use it for many things. It is very good and it is very cheap. You can use it for many things.",
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black54,
-                                    fontWeight: FontWeight.w400))),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                backgroundColor: Colors.red,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                    itemSnapshot
+                                        .child('Description')
+                                        .value
+                                        .toString(),
+                                    style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.w400))),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: Colors.red,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.restorablePushNamed(context,
-                                    ReservingItemOverviewView.routeName);
-                              },
-                              child: const Text("Rent this item"),
+                                  onPressed: () {
+                                    Navigator.restorablePushNamed(context,
+                                        ReservingItemOverviewView.routeName);
+                                  },
+                                  child: const Text("Rent this item"),
+                                )
+                              ],
                             )
-                          ],
-                        )
-                      ]))),
-        ));
+                          ]))),
+            );
+          }
+        },
+      ),
+    );
+  }
+
+  Future<DatabaseEvent> _fetchItemDetails() async {
+    return await _itemRef.once();
   }
 }

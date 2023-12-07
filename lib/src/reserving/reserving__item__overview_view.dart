@@ -1,10 +1,18 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 
 class ReservingItemOverviewView extends StatefulWidget {
-  const ReservingItemOverviewView({super.key});
+  ReservingItemOverviewView({super.key});
 
   static const routeName = '/reserving/overview';
+
+  DateTime selectedStartDate = DateTime.now();
+  TimeOfDay selectedStartTime = TimeOfDay.now();
+  DateTime selectedEndDate = DateTime.now().add(const Duration(days: 1));
+  TimeOfDay selectedEndTime = TimeOfDay.now();
+
+  TextEditingController durationController = TextEditingController();
 
   @override
   State<ReservingItemOverviewView> createState() =>
@@ -14,35 +22,36 @@ class ReservingItemOverviewView extends StatefulWidget {
 class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
   @override
   Widget build(BuildContext context) {
-    DateTime selectedDate = DateTime.now();
-    TimeOfDay selectedTime = TimeOfDay.now();
-
-    Future<void> _selectDate(BuildContext context) async {
+    Future<void> _selectStartDate(BuildContext context) async {
       final DateTime? pickedDate = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: widget.selectedStartDate,
         firstDate: DateTime(2000),
         lastDate: DateTime(2101),
       );
 
-      if (pickedDate != null && pickedDate != selectedDate) {
+      if (pickedDate != null && pickedDate != widget.selectedStartDate) {
         setState(() {
-          selectedDate = pickedDate;
+          widget.selectedStartDate = pickedDate;
         });
       }
     }
 
-    Future<void> _selectTime(BuildContext context) async {
+    Future<void> _SelectStartTime(BuildContext context) async {
       final TimeOfDay? pickedTime = await showTimePicker(
         context: context,
-        initialTime: selectedTime,
+        initialTime: widget.selectedStartTime,
       );
 
-      if (pickedTime != null && pickedTime != selectedTime) {
+      if (pickedTime != null && pickedTime != widget.selectedStartTime) {
         setState(() {
-          selectedTime = pickedTime;
+          widget.selectedStartTime = pickedTime;
         });
       }
+    }
+
+    bool areFieldsFilled() {
+      return widget.durationController.text.isNotEmpty;
     }
 
     return Scaffold(
@@ -76,13 +85,26 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
                       ),
                     ),
                     ListTile(
-                      title: Text('Selected Date: ${selectedDate.toLocal()}'),
-                      onTap: () => _selectDate(context),
+                      title: Text(
+                          'Selected Start Date: \n${widget.selectedStartDate.day}/'
+                          '${widget.selectedStartDate.month}/${widget.selectedStartDate.year}'),
+                      onTap: () => _selectStartDate(context),
                     ),
                     ListTile(
                       title: Text(
-                          'Selected Time: ${selectedTime.format(context)}'),
-                      onTap: () => _selectTime(context),
+                          'Selected Start Time: \n${widget.selectedStartTime.format(context)}'),
+                      onTap: () => _SelectStartTime(context),
+                    ),
+                    TextField(
+                      onChanged: (value) {
+                        setState(() {
+                          widget.durationController.text = value;
+                        });
+                      },
+                      decoration: const InputDecoration(
+                        labelText: 'Duration (in days)',
+                      ),
+                      keyboardType: TextInputType.number,
                     ),
                   ],
                 ),
@@ -92,7 +114,44 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
               height: 30,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: areFieldsFilled()
+                  ? () {
+                      DatabaseReference dbRef = FirebaseDatabase.instance.ref();
+
+                      String startDate =
+                          "${widget.selectedStartDate.year}-${widget.selectedStartDate.month}-${widget.selectedStartDate.day}T${widget.selectedStartTime.hour}:${widget.selectedStartTime.minute}";
+
+                      DateTime startDateWithAddedDays = widget.selectedStartDate
+                          .add(Duration(
+                              days: int.parse(widget.durationController.text)));
+
+                      String endDate =
+                          "${startDateWithAddedDays.year}-${startDateWithAddedDays.month}-${startDateWithAddedDays.day}T${widget.selectedStartTime.hour}:${widget.selectedStartTime.minute}";
+
+                      try {
+                        dbRef.child("Reservations").push().set({
+                          "ItemID": 101,
+                          "UserID": 101,
+                          "StartDate": startDate,
+                          "EndDate": endDate,
+                          "Status": "Complete",
+                          "ReservationID": 101,
+                        }).then((_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Reservation added"),
+                            ),
+                          );
+                        });
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Error"),
+                          ),
+                        );
+                      }
+                    }
+                  : null,
               child: const Text("Reserve"),
             ),
           ],

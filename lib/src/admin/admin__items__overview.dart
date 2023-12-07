@@ -83,11 +83,11 @@ class _AdminCreateItemState extends State<AdminCreateItem> {
                                         int.parse(lockerController.value.text);
 
                                     Map<String, dynamic> data = {
-                                      "itemID": itemID,
-                                      "description": description,
-                                      "categoryID": categoryID,
-                                      "lockerID": lockerID,
-                                      "status": "Available"
+                                      "ItemID": itemID,
+                                      "Description": description,
+                                      "CategoryID": categoryID,
+                                      "LockerID": lockerID,
+                                      "Status": "Available"
                                     };
 
                                     dbRef.child('Items').push().set(data).then(

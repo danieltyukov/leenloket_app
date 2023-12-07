@@ -2,7 +2,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-import 'package:leenloket_app/src/models/sample_item.dart';
 import 'package:leenloket_app/src/shop/shop__item__single_view.dart';
 import '../settings/settings_view.dart';
 
@@ -10,10 +9,7 @@ import '../settings/settings_view.dart';
 class HomeView extends StatefulWidget {
   const HomeView({
     super.key,
-    this.items = const [SampleItem(1), SampleItem(2), SampleItem(3)],
   });
-
-  final List<SampleItem> items;
 
   static const routeName = '/home';
 
@@ -76,7 +72,7 @@ class _HomeViewState extends State<HomeView> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) =>
-                                  const SampleItemDetailsView()));
+                                  ShopItemSingleView(itemId: snapshot.key!)));
                         },
                         child: Card(
                           child: ListTile(
