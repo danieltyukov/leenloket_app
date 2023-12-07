@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:leenloket_app/src/admin/Categories/admin__categories__index.dart';
+import 'package:leenloket_app/src/admin/admin__items__create.dart';
 import 'package:leenloket_app/src/admin/admin__items__index.dart';
-import 'package:leenloket_app/src/admin/admin__items__overview.dart';
 import 'package:leenloket_app/src/admin/admin__items__single.dart';
 import 'package:leenloket_app/src/admin/lockers/admin__lockers__index.dart';
 import 'package:leenloket_app/src/admin/reservations/admin__reservations__index.dart';
@@ -81,10 +81,10 @@ class MyApp extends StatelessWidget {
                   //Admin routes
                   case AdminHomeView.routeName:
                     return const AdminHomeView();
-                  case AdminCreateItem.routeName:
-                    return const AdminCreateItem();
                   case AdminIndexItems.routeName:
                     return const AdminIndexItems();
+                  case AdminItemCreate.routeName:
+                    return const AdminItemCreate();
                   case AdminItemSingleView.routeName:
                     // Extract itemId from route arguments
                     final Map<String, dynamic>? args =
@@ -125,7 +125,17 @@ class MyApp extends StatelessWidget {
 
                   // Reserving routes
                   case ReservingItemOverviewView.routeName:
-                    return ReservingItemOverviewView();
+                    // Extract itemId from route arguments
+                    final Map<String, dynamic>? args =
+                        routeSettings.arguments as Map<String, dynamic>?;
+
+                    if (args != null && args.containsKey('itemId')) {
+                      final String itemId = args['itemId'] as String;
+                      return ReservingItemOverviewView(itemId: itemId);
+                    } else {
+                      // Handle missing or invalid arguments
+                      return const SizedBox.shrink();
+                    }
 
                   // Shop routes
                   case SampleItemListView.routeName:

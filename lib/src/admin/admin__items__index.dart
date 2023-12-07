@@ -1,6 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:leenloket_app/src/admin/admin__items__create.dart';
 import 'package:leenloket_app/src/admin/admin__items__single.dart';
 
 class AdminIndexItems extends StatefulWidget {
@@ -39,5 +40,13 @@ class _AdminIndexItems extends State<AdminIndexItems> {
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AdminItemCreate()));
+        },
+        backgroundColor: Colors.blue,
+        child: const Icon(Icons.add), // Customize the color as needed
       ));
 }

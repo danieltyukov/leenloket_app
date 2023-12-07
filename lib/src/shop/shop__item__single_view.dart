@@ -63,26 +63,30 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                                   ],
                                   isAssets: true),
                             ),
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    SizedBox(height: 30),
-                                    Text("Drill",
-                                        style: TextStyle(
+                                    const SizedBox(height: 30),
+                                    Text(
+                                        itemSnapshot
+                                            .child('Title')
+                                            .value
+                                            .toString(),
+                                        style: const TextStyle(
                                             fontSize: 25,
                                             fontWeight: FontWeight.bold)),
-                                    SizedBox(height: 5),
-                                    Text("Tools",
+                                    const SizedBox(height: 5),
+                                    const Text("Tools",
                                         style: TextStyle(
                                             fontSize: 15,
                                             color: Colors.black54,
                                             fontWeight: FontWeight.w500))
                                   ],
                                 ),
-                                Text("€15",
+                                const Text("€15",
                                     style: TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold,
@@ -120,8 +124,12 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                                     ),
                                   ),
                                   onPressed: () {
-                                    Navigator.restorablePushNamed(context,
-                                        ReservingItemOverviewView.routeName);
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ReservingItemOverviewView(
+                                                    itemId:
+                                                        itemSnapshot.key!)));
                                   },
                                   child: const Text("Rent this item"),
                                 )

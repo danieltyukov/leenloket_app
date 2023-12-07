@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:leenloket_app/src/admin/Categories/admin__categories__index.dart';
-import 'package:leenloket_app/src/admin/admin__items__overview.dart';
+import 'package:leenloket_app/src/admin/admin__items__index.dart';
 import 'package:leenloket_app/src/admin/lockers/admin__lockers__index.dart';
 import 'package:leenloket_app/src/admin/reservations/admin__reservations__index.dart';
 import 'package:leenloket_app/src/widgets/customButton.dart';
@@ -33,7 +33,7 @@ class _AdminHomeViewState extends State<AdminHomeView> {
               color: Colors.orange,
               onPressed: () {
                 Navigator.restorablePushNamed(
-                    context, AdminCreateItem.routeName);
+                    context, AdminIndexItems.routeName);
               },
             ),
             CustomButton(
