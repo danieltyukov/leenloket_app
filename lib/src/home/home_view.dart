@@ -83,7 +83,7 @@ class _HomeViewState extends State<HomeView> {
               ]),
               body: pages[currentIndex],
               bottomNavigationBar: BottomNavigationBar(
-                backgroundColor: Colors.red,
+                backgroundColor: const Color(0xFFD7263D),
                 selectedItemColor: Colors.white,
                 unselectedItemColor: Colors.black,
                 currentIndex: currentIndex,
