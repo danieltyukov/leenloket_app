@@ -8,6 +8,7 @@ import 'package:leenloket_app/src/admin/admin__items__single.dart';
 import 'package:leenloket_app/src/admin/lockers/admin__lockers__index.dart';
 import 'package:leenloket_app/src/admin/reservations/admin__reservations__index.dart';
 import 'package:leenloket_app/src/authentication/auth__login_view.dart';
+import 'package:leenloket_app/src/authentication/auth__register_view.dart';
 import 'package:leenloket_app/src/home/admin__home_view.dart';
 import 'package:leenloket_app/src/home/home_view.dart';
 import 'package:leenloket_app/src/reservations/user__reservations__index.dart';
@@ -30,23 +31,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Glue the SettingsController to the MaterialApp.
-    //
-    // The ListenableBuilder Widget listens to the SettingsController for changes.
-    // Whenever the user updates their settings, the MaterialApp is rebuilt.
     return ListenableBuilder(
       listenable: settingsController,
       builder: (BuildContext context, Widget? child) {
         return MaterialApp(
-          // Providing a restorationScopeId allows the Navigator built by the
-          // MaterialApp to restore the navigation stack when a user leaves and
-          // returns to the app after it has been killed while running in the
-          // background.
           restorationScopeId: 'app',
-
-          // Provide the generated AppLocalizations to the MaterialApp. This
-          // allows descendant Widgets to display the correct translations
-          // depending on the user's locale.
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -54,30 +43,15 @@ class MyApp extends StatelessWidget {
             GlobalCupertinoLocalizations.delegate,
           ],
           supportedLocales: const [
-            Locale('en', ''), // English, no country code
+            Locale('en', ''),
           ],
-
-          // Use AppLocalizations to configure the correct application title
-          // depending on the user's locale.
-          //
-          // The appTitle is defined in .arb files found in the localization
-          // directory.
           onGenerateTitle: (BuildContext context) =>
               AppLocalizations.of(context)!.appTitle,
-
-          // Define a light and dark color theme. Then, read the user's
-          // preferred ThemeMode (light, dark, or system default) from the
-          // SettingsController to display the correct theme.
           theme: ThemeData(
-            // Define your own colors here
-            primaryColor: Colors.blue, // Change this to your accent color
-            // Other theme configurations...
+            primaryColor: Colors.blue,
           ),
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
-
-          // Define a function to handle named routes in order to support
-          // Flutter web url navigation and deep linking.
           onGenerateRoute: (RouteSettings routeSettings) {
             return MaterialPageRoute<void>(
               settings: routeSettings,
@@ -115,6 +89,9 @@ class MyApp extends StatelessWidget {
                   // Authentication routes
                   case AuthLoginView.routeName:
                     return const AuthLoginView();
+
+                  case AuthRegisterView.routeName:
+                    return const AuthRegisterView();
 
                   // Role routes
                   case RoleSelectorView.routeName:
