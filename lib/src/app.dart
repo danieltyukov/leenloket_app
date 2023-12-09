@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:leenloket_app/src/admin/Categories/admin__categories__index.dart';
-import 'package:leenloket_app/src/admin/admin__items__create.dart';
 import 'package:leenloket_app/src/admin/admin__items__index.dart';
-import 'package:leenloket_app/src/admin/admin__items__single.dart';
 import 'package:leenloket_app/src/admin/lockers/admin__lockers__index.dart';
 import 'package:leenloket_app/src/admin/reservations/admin__reservations__index.dart';
 import 'package:leenloket_app/src/authentication/auth__login_view.dart';
@@ -62,21 +60,6 @@ class MyApp extends StatelessWidget {
                     return const AdminHomeView();
                   case AdminIndexItems.routeName:
                     return const AdminIndexItems();
-                  case AdminItemCreate.routeName:
-                    return const AdminItemCreate();
-                  case AdminItemSingleView.routeName:
-                    // Extract itemId from route arguments
-                    final Map<String, dynamic>? args =
-                        routeSettings.arguments as Map<String, dynamic>?;
-
-                    if (args != null && args.containsKey('itemId')) {
-                      final String itemId = args['itemId'] as String;
-                      return AdminItemSingleView(itemId: itemId);
-                    } else {
-                      // Handle missing or invalid arguments
-                      return const SizedBox.shrink();
-                    }
-
                   case AdminReservationsIndex.routeName:
                     return const AdminReservationsIndex();
 
