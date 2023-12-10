@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AdminIndexItems extends StatefulWidget {
   const AdminIndexItems({Key? key}) : super(key: key);
@@ -16,7 +19,18 @@ class _AdminIndexItems extends State<AdminIndexItems> {
   final categoriesRef = FirebaseDatabase.instance.ref('Categories');
   final lockersRef = FirebaseDatabase.instance.ref('Lockers');
 
+  Future<String?> _uploadImage(XFile image) async {
+    FirebaseStorage storage = FirebaseStorage.instance;
+    Reference ref =
+        storage.ref().child('itemImages/${DateTime.now().toIso8601String()}');
+    UploadTask uploadTask = ref.putFile(File(image.path));
+    await uploadTask;
+    return await ref.getDownloadURL();
+  }
+
   void _createNewItem() async {
+    final ImagePicker _picker = ImagePicker();
+    XFile? image;
     final TextEditingController itemNameController = TextEditingController();
     final TextEditingController pricePerDayController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
@@ -24,7 +38,6 @@ class _AdminIndexItems extends State<AdminIndexItems> {
     String? selectedCategoryID;
     String? selectedLockerID;
 
-    // Fetch categories and lockers for dropdowns
     final categoriesSnapshot = await categoriesRef.get();
     final lockersSnapshot = await lockersRef.get();
 
@@ -83,6 +96,16 @@ class _AdminIndexItems extends State<AdminIndexItems> {
                   selectedLockerID = value;
                 },
               ),
+              ElevatedButton(
+                onPressed: () async {
+                  final XFile? pickedImage =
+                      await _picker.pickImage(source: ImageSource.gallery);
+                  if (pickedImage != null) {
+                    image = pickedImage;
+                  }
+                },
+                child: const Text('Pick Image'),
+              ),
             ],
           ),
         ),
@@ -92,13 +115,15 @@ class _AdminIndexItems extends State<AdminIndexItems> {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               if (itemNameController.text.isNotEmpty &&
                   pricePerDayController.text.isNotEmpty &&
                   descriptionController.text.isNotEmpty &&
                   statusController.text.isNotEmpty &&
                   selectedCategoryID != null &&
-                  selectedLockerID != null) {
+                  selectedLockerID != null &&
+                  image != null) {
+                final imageUrl = await _uploadImage(image!);
                 ref.push().set({
                   'ItemName': itemNameController.text,
                   'PricePerDay': int.parse(pricePerDayController.text),
@@ -106,6 +131,7 @@ class _AdminIndexItems extends State<AdminIndexItems> {
                   'Status': statusController.text,
                   'CategoryID': selectedCategoryID,
                   'LockerID': selectedLockerID,
+                  'ImageUrl': imageUrl ?? '', // Store the image URL
                 });
               }
               Navigator.pop(context);

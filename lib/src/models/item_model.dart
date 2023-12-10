@@ -5,14 +5,17 @@ class Item {
   final String status;
   final String categoryID;
   final String lockerID;
+  final String imageUrl;
 
-  Item(
-      {required this.itemName,
-      required this.pricePerDay,
-      required this.description,
-      required this.status,
-      required this.categoryID,
-      required this.lockerID});
+  Item({
+    required this.itemName,
+    required this.pricePerDay,
+    required this.description,
+    required this.status,
+    required this.categoryID,
+    required this.lockerID,
+    required this.imageUrl,
+  });
 
   factory Item.fromJson(Map<String, dynamic> json) {
     return Item(
@@ -22,6 +25,7 @@ class Item {
       status: json['Status'],
       categoryID: json['CategoryID'],
       lockerID: json['LockerID'],
+      imageUrl: json['ImageUrl'],
     );
   }
 
@@ -33,6 +37,7 @@ class Item {
       'Status': status,
       'CategoryID': categoryID,
       'LockerID': lockerID,
+      'ImageUrl': imageUrl,
     };
   }
 }

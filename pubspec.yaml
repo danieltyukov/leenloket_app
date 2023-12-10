@@ -28,6 +28,8 @@ dependencies:
   firebase_database: ^10.3.6
   date_field: ^3.0.5
   flutter_datetime_picker: ^1.5.1
+  firebase_storage: ^11.5.5
+  image_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:
