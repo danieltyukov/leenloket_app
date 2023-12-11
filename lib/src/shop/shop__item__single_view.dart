@@ -10,6 +10,7 @@ class ShopItemSingleView extends StatefulWidget {
   const ShopItemSingleView({super.key, required this.itemId});
 
   static const routeName = '/shop/items/single';
+
   @override
   State<ShopItemSingleView> createState() => _ShopItemSingleView();
 }
@@ -45,98 +46,94 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
             // Display details for the specific item
             return SingleChildScrollView(
               child: SafeArea(
-                  child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height: 350,
-                              width: MediaQuery.of(context).size.width,
-                              child: FanCarouselImageSlider(
-                                  sliderHeight: 300,
-                                  autoPlay: true,
-                                  imagesLink: [
-                                    image,
-                                    image,
-                                  ],
-                                  isAssets: true),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 350,
+                        width: MediaQuery.of(context).size.width,
+                        child: FanCarouselImageSlider(
+                          sliderHeight: 300,
+                          autoPlay: true,
+                          imagesLink: [image],
+                          isAssets: false,
+                          initalPageIndex: 0,
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 30),
+                              Text(
+                                  itemSnapshot
+                                      .child('ItemName')
+                                      .value
+                                      .toString(),
+                                  style: const TextStyle(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold)),
+                              const SizedBox(height: 5),
+                              const Text(
+                                  "Tools", // Replace with the actual category if needed
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black54,
+                                      fontWeight: FontWeight.w500))
+                            ],
+                          ),
+                          Text(
+                              "€${itemSnapshot.child('PricePerDay').value.toString()}",
+                              style: const TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red))
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                              itemSnapshot
+                                  .child('Description')
+                                  .value
+                                  .toString(),
+                              style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.w400))),
+                      const SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.white,
+                              backgroundColor: Colors.red,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 30),
-                                    Text(
-                                        itemSnapshot
-                                            .child('ItemName')
-                                            .value
-                                            .toString(),
-                                        style: const TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold)),
-                                    const SizedBox(height: 5),
-                                    const Text("Tools",
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            color: Colors.black54,
-                                            fontWeight: FontWeight.w500))
-                                  ],
-                                ),
-                                Text(
-                                    "€${itemSnapshot.child('PricePerDay').value.toString()}",
-                                    style: const TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red))
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                    itemSnapshot
-                                        .child('Description')
-                                        .value
-                                        .toString(),
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.black54,
-                                        fontWeight: FontWeight.w400))),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Colors.red,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                ReservingItemOverviewView(
-                                                    itemId:
-                                                        itemSnapshot.key!)));
-                                  },
-                                  child: const Text("Rent this item"),
-                                )
-                              ],
-                            )
-                          ]))),
+                            onPressed: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      ReservingItemOverviewView(
+                                          itemId: itemSnapshot.key!)));
+                            },
+                            child: const Text("Rent this item"),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
             );
           }
         },
