@@ -10,6 +10,8 @@ import 'package:leenloket_app/src/authentication/auth__register_view.dart';
 import 'package:leenloket_app/src/home/admin__home_view.dart';
 import 'package:leenloket_app/src/home/home_view.dart';
 import 'package:leenloket_app/src/reservations/user__reservations__index.dart';
+import 'package:leenloket_app/src/reservations/user__reservations__single.dart';
+import 'package:leenloket_app/src/reserving/reserving__item__confirmation_view.dart';
 import 'package:leenloket_app/src/reserving/reserving__item__overview_view.dart';
 import 'package:leenloket_app/src/roles/role__selector_view.dart';
 
@@ -104,6 +106,23 @@ class MyApp extends StatelessWidget {
                       // Handle missing or invalid arguments
                       return const SizedBox.shrink();
                     }
+
+                  case ReservationsSingle.routeName:
+                    // Extract itemId from route arguments
+                    final Map<String, dynamic>? args =
+                        routeSettings.arguments as Map<String, dynamic>?;
+
+                    if (args != null && args.containsKey('reservationId')) {
+                      final String reservationId =
+                          args['reservationId'] as String;
+                      return ReservationsSingle(reservationId: reservationId);
+                    } else {
+                      // Handle missing or invalid arguments
+                      return const SizedBox.shrink();
+                    }
+
+                  case ReservingItemConfirmation.routeName:
+                    return const ReservingItemConfirmation();
 
                   // Shop routes
                   case SampleItemListView.routeName:

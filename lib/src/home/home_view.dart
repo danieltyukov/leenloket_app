@@ -28,16 +28,6 @@ class _HomeViewState extends State<HomeView> {
   int currentIndex = 0;
   final PageController _pageController = PageController();
 
-  Future<User?> getCurrentUserId() async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      return user;
-    } else {
-      return null; // User is not logged in
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // Define your pages/screens here
@@ -48,68 +38,49 @@ class _HomeViewState extends State<HomeView> {
       const UserReservationsIndex(),
     ];
 
-    return FutureBuilder(
-        future: getCurrentUserId(),
-        builder: (context, AsyncSnapshot<User?> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (!snapshot.hasData || snapshot.data == null) {
-            return const Text('Data not available');
-          } else {
-            User user = snapshot.data!;
-            String userName = user.displayName ?? "Fred";
-            String userPicture = user.photoURL ?? "";
-
-            return Scaffold(
-              appBar: AppBar(title: Text("Hello, $userName"), actions: [
-                InkWell(
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                    child: ProfilePicture(
-                      name: userName,
-                      radius: 25,
-                      fontsize: 21,
-                      img: userPicture,
-                    ),
-                  ),
-                  onTap: () {
-                    Navigator.restorablePushNamed(
-                        context, SettingsView.routeName);
-                  },
-                )
-              ]),
-              body: pages[currentIndex],
-              bottomNavigationBar: BottomNavigationBar(
-                backgroundColor: const Color(0xFFD7263D),
-                selectedItemColor: Colors.white,
-                unselectedItemColor: Colors.black,
-                currentIndex: currentIndex,
-                onTap: (index) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-                items: const [
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.home),
-                    label: 'Home',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.list),
-                    label: 'Items',
-                  ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.calendar_today),
-                    label: 'My Reservations',
-                  ),
-                ],
-              ),
-            );
-          }
-        });
+    return Scaffold(
+      appBar: AppBar(title: const Text("Hello, Fred"), actions: [
+        InkWell(
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+            child: const ProfilePicture(
+              name: "Fred",
+              radius: 25,
+              fontsize: 21,
+            ),
+          ),
+          onTap: () {
+            Navigator.restorablePushNamed(context, SettingsView.routeName);
+          },
+        )
+      ]),
+      body: pages[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color(0xFFD7263D),
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.black,
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.list),
+            label: 'Items',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'My Reservations',
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -159,10 +130,10 @@ class HomePageView extends StatelessWidget {
                     },
                     child: Card(
                       child: ListTile(
-                        title: Text(snapshot.child('Title').value.toString()),
-                        subtitle: Text("ID: ${snapshot.child('ItemID').value}"),
-                        trailing:
-                            Text(snapshot.child('Status').value.toString()),
+                        title:
+                            Text(snapshot.child('ItemName').value.toString()),
+                        subtitle: Text(
+                            "€${snapshot.child('PricePerDay').value} per day"),
                       ),
                     ),
                   );

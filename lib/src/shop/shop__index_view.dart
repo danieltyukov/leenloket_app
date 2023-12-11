@@ -41,9 +41,9 @@ class _SampleItemListViewState extends State<SampleItemListView> {
             },
             child: Card(
               child: ListTile(
-                title: Text(snapshot.child('Description').value.toString()),
-                subtitle: Text("ID: ${snapshot.child('ItemID').value}"),
-                trailing: Text(snapshot.child('Status').value.toString()),
+                title: Text(snapshot.child('ItemName').value.toString()),
+                subtitle:
+                    Text("€${snapshot.child('PricePerDay').value} per day"),
               ),
             ),
           );

@@ -41,6 +41,7 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
             return const Text('Data not available');
           } else {
             DataSnapshot itemSnapshot = snapshot.data!.snapshot;
+            String image = itemSnapshot.child('ImageUrl').value.toString();
             // Display details for the specific item
             return SingleChildScrollView(
               child: SafeArea(
@@ -56,10 +57,9 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                               child: FanCarouselImageSlider(
                                   sliderHeight: 300,
                                   autoPlay: true,
-                                  imagesLink: const [
-                                    'assets/images/drill.jpg',
-                                    'assets/images/drill.jpg',
-                                    'assets/images/drill.jpg'
+                                  imagesLink: [
+                                    image,
+                                    image,
                                   ],
                                   isAssets: true),
                             ),
@@ -72,7 +72,7 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                                     const SizedBox(height: 30),
                                     Text(
                                         itemSnapshot
-                                            .child('Title')
+                                            .child('ItemName')
                                             .value
                                             .toString(),
                                         style: const TextStyle(
@@ -86,8 +86,9 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                                             fontWeight: FontWeight.w500))
                                   ],
                                 ),
-                                const Text("€15",
-                                    style: TextStyle(
+                                Text(
+                                    "€${itemSnapshot.child('PricePerDay').value.toString()}",
+                                    style: const TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.red))

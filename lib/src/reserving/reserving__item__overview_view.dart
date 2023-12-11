@@ -5,6 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/services.dart';
+import 'package:leenloket_app/src/reserving/reserving__item__confirmation_view.dart';
 
 class ReservingItemOverviewView extends StatefulWidget {
   String itemId;
@@ -41,8 +42,8 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: widget.selectedStartDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 7)),
     );
 
     if (pickedDate != null && pickedDate != widget.selectedStartDate) {
@@ -167,36 +168,54 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
                           children: [
                             ElevatedButton(
                               onPressed: () async {
-                                DatabaseReference dbRef =
-                                    FirebaseDatabase.instance.ref();
+                                DatabaseReference dbRefReservations =
+                                    FirebaseDatabase.instance
+                                        .ref()
+                                        .child("Reservations");
+
+                                DatabaseReference dbRefCodes = FirebaseDatabase
+                                    .instance
+                                    .ref()
+                                    .child("Codes");
 
                                 String startDate =
-                                    "${widget.selectedStartDate.year}-${widget.selectedStartDate.month}-${widget.selectedStartDate.day}T${widget.selectedStartTime.hour}:${widget.selectedStartTime.minute}";
+                                    "${widget.selectedStartDate.year}-${widget.selectedStartDate.month}-${widget.selectedStartDate.day} ${widget.selectedStartTime.hour}:${widget.selectedStartTime.minute}";
 
                                 DateTime startDateWithAddedDays = widget
                                     .selectedStartDate
                                     .add(Duration(days: selectedNumber));
 
                                 String endDate =
-                                    "${startDateWithAddedDays.year}-${startDateWithAddedDays.month}-${startDateWithAddedDays.day}T${widget.selectedStartTime.hour}:${widget.selectedStartTime.minute}";
+                                    "${startDateWithAddedDays.year}-${startDateWithAddedDays.month}-${startDateWithAddedDays.day} ${widget.selectedStartTime.hour}:${widget.selectedStartTime.minute}";
 
                                 try {
                                   String? userId = user.uid;
 
-                                  dbRef.child("Reservations").push().set({
-                                    "ItemID":
-                                        itemSnapshot.child('ItemID').value,
+                                  DatabaseReference newReservationRef =
+                                      dbRefReservations.push();
+
+                                  Random random = Random();
+                                  //int reservationCode =
+                                  //random.nextInt(9000) + 1000;
+
+                                  int reservationCode = 1234;
+
+                                  newReservationRef.set({
+                                    "ItemID": itemSnapshot.key,
                                     "UserID": userId,
                                     "StartDate": startDate,
                                     "EndDate": endDate,
-                                    "Status": "Booked",
-                                    "ReservationID": 101,
+                                    "Status": "Reserved",
+                                  });
+
+                                  dbRefCodes.push().set({
+                                    "Code": "QRCODEHERE",
+                                    "PINCode": "$reservationCode",
+                                    "ReservationID": newReservationRef.key,
                                   }).then((_) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text("Reservation added"),
-                                      ),
-                                    );
+                                    Navigator.of(context).push(MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ReservingItemConfirmation()));
                                   });
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -261,7 +280,6 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
                             "The following details will be used to rent the item."),
                         const SizedBox(height: 30),
                         Text("Email: ${user.email!}"),
-                        Text("Name: ${user.displayName!}"),
                       ],
                     )),
               )
@@ -364,7 +382,7 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
                         children: [
                           const Text("Item:"),
                           const SizedBox(width: 10),
-                          Text("${itemSnapshot.child('Title').value}"),
+                          Text("${itemSnapshot.child('ItemName').value}"),
                         ],
                       ),
                       Row(
