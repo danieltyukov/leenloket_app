@@ -9,6 +9,7 @@ import 'package:leenloket_app/src/home/admin__home_view.dart';
 import 'package:leenloket_app/src/reservations/user__reservations__index.dart';
 import 'package:leenloket_app/src/shop/shop__index_view.dart';
 import 'package:leenloket_app/src/shop/shop__item__single_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../settings/settings_view.dart';
 
 /// Displays a list of SampleItems.
@@ -30,9 +31,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    // Define your pages/screens here
     final List<Widget> pages = [
-      // Add your pages/screens here
       HomePageView(),
       const SampleItemListView(),
       const UserReservationsIndex(),
@@ -95,54 +94,70 @@ class HomePageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-                height: 150,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 229, 77, 77),
-                    borderRadius: BorderRadius.circular(20)),
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 25, bottom: 25),
-                  child: Image.asset('assets/images/logo.png'),
-                )),
-            const SizedBox(
-              height: 20,
-            ),
-            Container(
-              color: Colors.transparent,
-              height: 250,
-              child: FirebaseAnimatedList(
-                query: ref,
-                itemBuilder: (context, snapshot, animation, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) =>
-                              ShopItemSingleView(itemId: snapshot.key!)));
-                    },
-                    child: Card(
-                      child: ListTile(
-                        title:
-                            Text(snapshot.child('ItemName').value.toString()),
-                        subtitle: Text(
-                            "€${snapshot.child('PricePerDay').value} per day"),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            )
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 20),
+              Container(
+                  height: 150,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 229, 77, 77),
+                      borderRadius: BorderRadius.circular(20)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 25, bottom: 25),
+                    child: Image.asset('assets/images/logo.png'),
+                  )),
+              const SizedBox(height: 20),
+              Container(
+                color: Colors.transparent,
+                height: 250,
+                child: FirebaseAnimatedList(
+                  query: ref.orderByChild('Status').equalTo('Available'),
+                  itemBuilder: (context, snapshot, animation, index) {
+                    if (snapshot.child('Status').value.toString() ==
+                        'Available') {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  ShopItemSingleView(itemId: snapshot.key!)));
+                        },
+                        child: Card(
+                          child: ListTile(
+                            leading: Container(
+                              width: 80, // Set your desired width
+                              height: 60, // Set your desired height
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    snapshot.child('ImageUrl').value.toString(),
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                                fit: BoxFit
+                                    .cover, // Ensures the image covers the container
+                              ),
+                            ),
+                            title: Text(
+                                snapshot.child('ItemName').value.toString()),
+                            subtitle: Text(
+                                "€${snapshot.child('PricePerDay').value} per day"),
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+              )
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }
