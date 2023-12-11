@@ -21,8 +21,10 @@ class _AdminIndexItems extends State<AdminIndexItems> {
 
   Future<String?> _uploadImage(XFile image) async {
     FirebaseStorage storage = FirebaseStorage.instance;
-    Reference ref =
-        storage.ref().child('itemImages/${DateTime.now().toIso8601String()}');
+
+    String fileName = 'itemImages/${DateTime.now().toIso8601String()}.jpg';
+    Reference ref = storage.ref().child(fileName);
+
     UploadTask uploadTask = ref.putFile(File(image.path));
     await uploadTask;
     return await ref.getDownloadURL();
