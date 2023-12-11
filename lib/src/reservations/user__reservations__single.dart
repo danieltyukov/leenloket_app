@@ -14,26 +14,66 @@ class ReservationsSingle extends StatefulWidget {
 
 class _ReservationsSingle extends State<ReservationsSingle> {
   late DatabaseReference _reservationRef;
-  late DatabaseReference _codesRef;
+  final _codesRef = FirebaseDatabase.instance.ref('Codes');
+  final _itemsRef = FirebaseDatabase.instance.ref('Items');
+  String _code = '';
+  String _itemName = '';
+  String _itemDescription = '';
 
   @override
   void initState() {
     super.initState();
-    // Initialize DatabaseReference for the specific item
     _reservationRef =
         FirebaseDatabase.instance.ref('Reservations/${widget.reservationId}');
-    _codesRef = FirebaseDatabase.instance.ref('Codes');
+    fetchCode(widget.reservationId);
+    fetchItem(widget.reservationId);
   }
 
   Future<DatabaseEvent> fetchReservation(String reservationId) async {
     return await _reservationRef.once();
   }
 
-  Future<DatabaseEvent> fetchCodes(String reservationId) async {
-    return await _codesRef
-        .orderByChild('ReservationID')
-        .equalTo(reservationId)
-        .once();
+  Future<void> fetchCode(String reservationId) async {
+    DataSnapshot snapshot = await _codesRef.get();
+    String code = '';
+
+    if (snapshot.exists) {
+      Map<dynamic, dynamic> values = snapshot.value as Map;
+      values.forEach((key, value) {
+        if (value['ReservationID'] == reservationId) {
+          code = value['PINCode'];
+        }
+      });
+    }
+
+    setState(() {
+      _code = code;
+    });
+  }
+
+  Future<void> fetchItem(String reservationId) async {
+    final reservation =
+        FirebaseDatabase.instance.ref('Reservations/${widget.reservationId}');
+
+    DataSnapshot reservationSnapshot = await reservation.get();
+    DataSnapshot itemsSnapshot = await _itemsRef.get();
+
+    String itemId = reservationSnapshot.child('ItemID').value.toString();
+
+    String itemName = '';
+
+    if (itemsSnapshot.exists) {
+      Map<dynamic, dynamic> values = itemsSnapshot.value as Map;
+      values.forEach((key, value) {
+        if (key == itemId) {
+          itemName = value['ItemName'];
+        }
+      });
+    }
+
+    setState(() {
+      _itemName = itemName;
+    });
   }
 
   @override
@@ -63,29 +103,8 @@ class _ReservationsSingle extends State<ReservationsSingle> {
                         "Pickup date: ${reservationSnapshot.child("StartDate").value.toString()}")
                   ],
                 ),
-                Row(
-                  children: [
-                    FutureBuilder(
-                      future: fetchCodes(widget.reservationId),
-                      builder: (context, codeSnapshot) {
-                        if (codeSnapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else if (codeSnapshot.hasError) {
-                          return Text('Error: ${codeSnapshot.error}');
-                        } else {
-                          // Access your data using reservationSnapshot.data and codeSnapshot.data
-
-                          return const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Code: 1234'),
-                            ],
-                          );
-                        }
-                      },
-                    )
-                  ],
+                Column(
+                  children: [Text("Code: $_code"), Text("Item: $_itemName")],
                 )
               ]),
             );

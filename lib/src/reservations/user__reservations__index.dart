@@ -16,14 +16,13 @@ class UserReservationsIndex extends StatefulWidget {
 class _UserReservationsIndex extends State<UserReservationsIndex> {
   late String loggedInUserID;
   late DatabaseReference reservationsRef;
-  late DatabaseReference itemsRef;
+  final _itemsRef = FirebaseDatabase.instance;
 
   @override
   void initState() {
     super.initState();
     loggedInUserID = FirebaseAuth.instance.currentUser!.uid;
     reservationsRef = FirebaseDatabase.instance.ref().child('Reservations');
-    itemsRef = FirebaseDatabase.instance.ref().child('Items');
   }
 
   @override
@@ -39,25 +38,43 @@ class _UserReservationsIndex extends State<UserReservationsIndex> {
       query: reservationsRef.orderByChild('UserID').equalTo(loggedInUserID),
       itemBuilder: (context, snapshot, animation, index) {
         if (snapshot.value != null) {
-          // Extract reservation details
+          return FutureBuilder<String>(
+            future: _fetchItemTitle(snapshot.child('ItemID').value.toString()),
+            builder: (context, titleSnapshot) {
+              if (titleSnapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator(); // or some loading indicator
+              } else if (titleSnapshot.hasError) {
+                return Text('Error: ${titleSnapshot.error}');
+              } else {
+                String itemTitle = titleSnapshot.data ?? "Title";
 
-          return GestureDetector(
-            onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) =>
-                      ReservationsSingle(reservationId: snapshot.key!)));
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) =>
+                            ReservationsSingle(reservationId: snapshot.key!)));
+                  },
+                  child: Card(
+                    child: ListTile(
+                      title: Text("Reservation for: $itemTitle"),
+                      subtitle:
+                          Text("Pickup: ${snapshot.child('StartDate').value}"),
+                    ),
+                  ),
+                );
+              }
             },
-            child: Card(
-              child: ListTile(
-                title: Text("Title"),
-                subtitle: Text("Pickup: ${snapshot.child('StartDate').value}"),
-              ),
-            ),
           );
         } else {
           return const SizedBox(); // Placeholder for an empty item
         }
       },
     );
+  }
+
+  Future<String> _fetchItemTitle(String itemID) async {
+    DataSnapshot itemSnapshot =
+        await FirebaseDatabase.instance.ref().child('Items/$itemID').get();
+    return itemSnapshot.child('ItemName').value?.toString() ?? "Title";
   }
 }

@@ -195,10 +195,8 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
                                       dbRefReservations.push();
 
                                   Random random = Random();
-                                  //int reservationCode =
-                                  //random.nextInt(9000) + 1000;
-
-                                  int reservationCode = 1234;
+                                  int reservationCode =
+                                      random.nextInt(9000) + 1000;
 
                                   newReservationRef.set({
                                     "ItemID": itemSnapshot.key,
@@ -213,9 +211,10 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
                                     "PINCode": "$reservationCode",
                                     "ReservationID": newReservationRef.key,
                                   }).then((_) {
-                                    Navigator.of(context).push(MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ReservingItemConfirmation()));
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const ReservingItemConfirmation()));
                                   });
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(
