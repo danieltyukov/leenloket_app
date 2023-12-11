@@ -38,7 +38,7 @@ class _HomeViewState extends State<HomeView> {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Hello, Fred"), actions: [
+      appBar: AppBar(title: const Text("Hello, Friend"), actions: [
         InkWell(
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
