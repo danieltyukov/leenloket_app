@@ -122,7 +122,7 @@ class _ReservationsSingle extends State<ReservationsSingle> {
                         onPressed: () {
                           _reservationRef.update({
                             'Status': 'Cancelled',
-                          }).then();
+                          });
                         },
                         child: const Text('Cancel Reservation'))
                   ],
