@@ -194,9 +194,7 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
                                   DatabaseReference newReservationRef =
                                       dbRefReservations.push();
 
-                                  Random random = Random();
-                                  int reservationCode =
-                                      random.nextInt(9000) + 1000;
+                                  int reservationCode = createReservationCode();
 
                                   newReservationRef.set({
                                     "ItemID": itemSnapshot.key,
@@ -240,6 +238,19 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
             }
           }),
     );
+  }
+
+  int createReservationCode() {
+    Random random = Random();
+    int randomNumber = random.nextInt(9999);
+
+    FirebaseDatabase.instance.ref('Codes/$randomNumber').get().then((value) {
+      if (value.exists) {
+        createReservationCode();
+      }
+    });
+
+    return randomNumber;
   }
 
   Future<DatabaseEvent> _fetchItemDetails() async {
