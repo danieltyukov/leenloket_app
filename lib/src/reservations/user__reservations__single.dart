@@ -103,8 +103,29 @@ class _ReservationsSingle extends State<ReservationsSingle> {
                         "Pickup date: ${reservationSnapshot.child("StartDate").value.toString()}")
                   ],
                 ),
-                Column(
-                  children: [Text("Code: $_code"), Text("Item: $_itemName")],
+                Row(children: [
+                  Text(
+                      "Return date: ${reservationSnapshot.child("EndDate").value.toString()}")
+                ]),
+                Row(children: [
+                  Text(
+                      "Status: ${reservationSnapshot.child("Status").value.toString()}")
+                ]),
+                Row(children: [Text("Code: $_code")]),
+                Row(children: [Text("Item: $_itemName")]),
+                const SizedBox(
+                  height: 50,
+                ),
+                Row(
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          _reservationRef.update({
+                            'Status': 'Cancelled',
+                          }).then();
+                        },
+                        child: const Text('Cancel Reservation'))
+                  ],
                 )
               ]),
             );
