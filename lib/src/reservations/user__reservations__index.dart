@@ -56,7 +56,7 @@ class _UserReservationsIndex extends State<UserReservationsIndex> {
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            Expanded(child: buildList("Copmleted")),
+            Expanded(child: buildList("Completed")),
             const SizedBox(height: 20),
             const Text(
               'Cancelled Reservations',
