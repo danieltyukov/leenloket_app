@@ -17,12 +17,39 @@ class ShopItemSingleView extends StatefulWidget {
 
 class _ShopItemSingleView extends State<ShopItemSingleView> {
   late DatabaseReference _itemRef;
+  final _categoryRef = FirebaseDatabase.instance.ref('Categories');
+  String _categoryName = '';
+
+  Future<void> fetchCategory(String itemId) async {
+    final item = FirebaseDatabase.instance.ref('Items/${widget.itemId}');
+
+    DataSnapshot itemSnapshot = await item.get();
+    DataSnapshot categorySnapshot = await _categoryRef.get();
+
+    String categoryId = itemSnapshot.child('CategoryID').value.toString();
+
+    String categoryName = '';
+
+    if (categorySnapshot.exists) {
+      Map<dynamic, dynamic> values = categorySnapshot.value as Map;
+      values.forEach((key, value) {
+        if (key == categoryId) {
+          categoryName = value['CategoryName'];
+        }
+      });
+    }
+
+    setState(() {
+      _categoryName = categoryName;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     // Initialize DatabaseReference for the specific item
     _itemRef = FirebaseDatabase.instance.ref('Items/${widget.itemId}');
+    fetchCategory(widget.itemId);
   }
 
   @override
@@ -79,9 +106,9 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold)),
                               const SizedBox(height: 5),
-                              const Text(
-                                  "Tools", // Replace with the actual category if needed
-                                  style: TextStyle(
+                              Text(
+                                  _categoryName, // Replace with the actual category if needed
+                                  style: const TextStyle(
                                       fontSize: 15,
                                       color: Colors.black54,
                                       fontWeight: FontWeight.w500))

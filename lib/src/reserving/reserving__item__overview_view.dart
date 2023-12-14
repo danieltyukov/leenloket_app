@@ -16,8 +16,6 @@ class ReservingItemOverviewView extends StatefulWidget {
 
   DateTime selectedStartDate = DateTime.now();
   TimeOfDay selectedStartTime = TimeOfDay.now();
-  DateTime selectedEndDate = DateTime.now().add(const Duration(days: 1));
-  TimeOfDay selectedEndTime = TimeOfDay.now();
 
   TextEditingController durationController = TextEditingController();
 
@@ -178,15 +176,25 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
                                     .ref()
                                     .child("Codes");
 
+                                String zeroMinutes = "00";
+
+                                if (widget.selectedStartTime.minute
+                                        .toString() ==
+                                    "0") {
+                                  zeroMinutes = "00";
+                                } else {
+                                  zeroMinutes = widget.selectedStartTime.minute
+                                      .toString();
+                                }
                                 String startDate =
-                                    "${widget.selectedStartDate.year}-${widget.selectedStartDate.month}-${widget.selectedStartDate.day} ${widget.selectedStartTime.hour}:${widget.selectedStartTime.minute}";
+                                    "${widget.selectedStartDate.year}-${widget.selectedStartDate.month}-${widget.selectedStartDate.day} ${widget.selectedStartTime.hour}:$zeroMinutes:00";
 
                                 DateTime startDateWithAddedDays = widget
                                     .selectedStartDate
                                     .add(Duration(days: selectedNumber));
 
                                 String endDate =
-                                    "${startDateWithAddedDays.year}-${startDateWithAddedDays.month}-${startDateWithAddedDays.day} ${widget.selectedStartTime.hour}:${widget.selectedStartTime.minute}";
+                                    "${startDateWithAddedDays.year}-${startDateWithAddedDays.month}-${startDateWithAddedDays.day} ${widget.selectedStartTime.hour}:$zeroMinutes:00";
 
                                 try {
                                   String? userId = user.uid;
@@ -413,7 +421,7 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
                           const Text("End Date:"),
                           const SizedBox(width: 10),
                           Text(
-                              "${widget.selectedEndDate.day}/${widget.selectedEndDate.month}/${widget.selectedEndDate.year}"),
+                              "${widget.selectedStartDate.add(Duration(days: selectedNumber)).day}/${widget.selectedStartDate.add(Duration(days: selectedNumber)).month}/${widget.selectedStartDate.add(Duration(days: selectedNumber)).year}"),
                         ],
                       ),
                       Row(
