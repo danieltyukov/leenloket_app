@@ -5,7 +5,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/services.dart';
-import 'package:leenloket_app/src/reserving/reserving__item__confirmation_view.dart';
+import 'package:Leenloket/src/reserving/reserving__item__confirmation_view.dart';
 
 class ReservingItemOverviewView extends StatefulWidget {
   String itemId;
@@ -212,7 +212,10 @@ class _ReservingItemOverviewViewState extends State<ReservingItemOverviewView> {
                                     Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const ReservingItemConfirmation()));
+                                                ReservingItemConfirmation(
+                                                    reservationId:
+                                                        newReservationRef
+                                                            .key!)));
                                   });
                                 } catch (e) {
                                   ScaffoldMessenger.of(context).showSnackBar(

@@ -1,5 +1,5 @@
-name: leenloket_app
-description: "A new Flutter project."
+name: Leenloket
+description: "Lend, use and return"
 
 # Prevent accidental publishing to pub.dev.
 publish_to: 'none'

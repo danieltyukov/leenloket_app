@@ -1,3 +1,4 @@
+import 'package:Leenloket/src/reservations/user__reservations__index.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -116,17 +117,51 @@ class _ReservationsSingle extends State<ReservationsSingle> {
                 const SizedBox(
                   height: 50,
                 ),
-                Row(
-                  children: [
-                    ElevatedButton(
+                if (reservationSnapshot.child("Status").value.toString() ==
+                    "Reserved")
+                  Row(
+                    children: [
+                      ElevatedButton(
                         onPressed: () {
-                          _reservationRef.update({
-                            'Status': 'Cancelled',
-                          });
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('Confirmation'),
+                                content: const Text(
+                                    'Are you sure you want to perform this action?'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                    },
+                                    child: const Text('Cancel'),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      // Perform the action when confirmed
+                                      // Add your button logic here
+                                      _reservationRef.update({
+                                        'Status': 'Cancelled',
+                                      });
+                                      Navigator.of(context).pop();
+                                      Navigator.restorablePushNamed(
+                                          context,
+                                          UserReservationsIndex
+                                              .routeName); // Close the dialog
+                                    },
+                                    child: const Text('Confirm'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
-                        child: const Text('Cancel Reservation'))
-                  ],
-                )
+                        child: const Text('Cancel Reservation'),
+                      )
+                    ],
+                  )
               ]),
             );
           }

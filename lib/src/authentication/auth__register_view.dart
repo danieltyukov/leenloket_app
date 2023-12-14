@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:leenloket_app/src/authentication/auth__login_view.dart';
-import 'package:leenloket_app/src/models/user_model.dart' as UserModel;
+import 'package:Leenloket/src/authentication/auth__login_view.dart';
+import 'package:Leenloket/src/models/user_model.dart' as UserModel;
 
 class AuthRegisterView extends StatelessWidget {
   const AuthRegisterView({super.key});

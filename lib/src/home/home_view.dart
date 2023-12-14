@@ -3,12 +3,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-import 'package:leenloket_app/src/admin/admin__items__index.dart';
-import 'package:leenloket_app/src/admin/reservations/admin__reservations__index.dart';
-import 'package:leenloket_app/src/home/admin__home_view.dart';
-import 'package:leenloket_app/src/reservations/user__reservations__index.dart';
-import 'package:leenloket_app/src/shop/shop__index_view.dart';
-import 'package:leenloket_app/src/shop/shop__item__single_view.dart';
+import 'package:Leenloket/src/admin/admin__items__index.dart';
+import 'package:Leenloket/src/admin/reservations/admin__reservations__index.dart';
+import 'package:Leenloket/src/home/admin__home_view.dart';
+import 'package:Leenloket/src/reservations/user__reservations__index.dart';
+import 'package:Leenloket/src/shop/shop__index_view.dart';
+import 'package:Leenloket/src/shop/shop__item__single_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../settings/settings_view.dart';
 

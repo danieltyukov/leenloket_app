@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:leenloket_app/src/admin/Categories/admin__categories__index.dart';
-import 'package:leenloket_app/src/admin/admin__items__index.dart';
-import 'package:leenloket_app/src/admin/lockers/admin__lockers__index.dart';
-import 'package:leenloket_app/src/admin/reservations/admin__reservations__index.dart';
-import 'package:leenloket_app/src/widgets/customButton.dart';
+import 'package:Leenloket/src/admin/Categories/admin__categories__index.dart';
+import 'package:Leenloket/src/admin/admin__items__index.dart';
+import 'package:Leenloket/src/admin/lockers/admin__lockers__index.dart';
+import 'package:Leenloket/src/admin/reservations/admin__reservations__index.dart';
+import 'package:Leenloket/src/widgets/customButton.dart';
 
 class AdminHomeView extends StatefulWidget {
   const AdminHomeView({Key? key}) : super(key: key);

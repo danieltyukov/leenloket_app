@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:leenloket_app/src/admin/Categories/admin__categories__index.dart';
-import 'package:leenloket_app/src/admin/admin__items__index.dart';
-import 'package:leenloket_app/src/admin/lockers/admin__lockers__index.dart';
-import 'package:leenloket_app/src/admin/reservations/admin__reservations__index.dart';
-import 'package:leenloket_app/src/authentication/auth__login_view.dart';
-import 'package:leenloket_app/src/authentication/auth__register_view.dart';
-import 'package:leenloket_app/src/home/admin__home_view.dart';
-import 'package:leenloket_app/src/home/home_view.dart';
-import 'package:leenloket_app/src/reservations/user__reservations__index.dart';
-import 'package:leenloket_app/src/reservations/user__reservations__single.dart';
-import 'package:leenloket_app/src/reserving/reserving__item__confirmation_view.dart';
-import 'package:leenloket_app/src/reserving/reserving__item__overview_view.dart';
-import 'package:leenloket_app/src/roles/role__selector_view.dart';
+import 'package:Leenloket/src/admin/Categories/admin__categories__index.dart';
+import 'package:Leenloket/src/admin/admin__items__index.dart';
+import 'package:Leenloket/src/admin/lockers/admin__lockers__index.dart';
+import 'package:Leenloket/src/admin/reservations/admin__reservations__index.dart';
+import 'package:Leenloket/src/authentication/auth__login_view.dart';
+import 'package:Leenloket/src/authentication/auth__register_view.dart';
+import 'package:Leenloket/src/home/admin__home_view.dart';
+import 'package:Leenloket/src/home/home_view.dart';
+import 'package:Leenloket/src/reservations/user__reservations__index.dart';
+import 'package:Leenloket/src/reservations/user__reservations__single.dart';
+import 'package:Leenloket/src/reserving/reserving__item__confirmation_view.dart';
+import 'package:Leenloket/src/reserving/reserving__item__overview_view.dart';
+import 'package:Leenloket/src/roles/role__selector_view.dart';
 
 import 'shop/shop__item__single_view.dart';
 import 'shop/shop__index_view.dart';
@@ -122,7 +122,19 @@ class MyApp extends StatelessWidget {
                     }
 
                   case ReservingItemConfirmation.routeName:
-                    return const ReservingItemConfirmation();
+                    // Extract itemId from route arguments
+                    final Map<String, dynamic>? args =
+                        routeSettings.arguments as Map<String, dynamic>?;
+
+                    if (args != null && args.containsKey('reservationId')) {
+                      final String reservationId =
+                          args['reservationId'] as String;
+                      return ReservingItemConfirmation(
+                          reservationId: reservationId);
+                    } else {
+                      // Handle missing or invalid arguments
+                      return const SizedBox.shrink();
+                    }
 
                   // Shop routes
                   case SampleItemListView.routeName:

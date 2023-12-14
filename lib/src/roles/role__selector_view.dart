@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:leenloket_app/src/home/admin__home_view.dart';
-import 'package:leenloket_app/src/home/home_view.dart';
+import 'package:Leenloket/src/home/admin__home_view.dart';
+import 'package:Leenloket/src/home/home_view.dart';
 
 class RoleSelectorView extends StatelessWidget {
   const RoleSelectorView({super.key});
