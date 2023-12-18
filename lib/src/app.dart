@@ -6,7 +6,6 @@ import 'package:Leenloket/src/admin/Categories/admin__categories__index.dart';
 import 'package:Leenloket/src/admin/admin__items__index.dart';
 import 'package:Leenloket/src/admin/lockers/admin__lockers__index.dart';
 import 'package:Leenloket/src/admin/reservations/admin__reservations__index.dart';
-import 'package:Leenloket/src/authentication/auth__login_view.dart';
 import 'package:Leenloket/src/authentication/auth__register_view.dart';
 import 'package:Leenloket/src/home/admin__home_view.dart';
 import 'package:Leenloket/src/home/home_view.dart';
@@ -73,8 +72,8 @@ class MyApp extends StatelessWidget {
                     return const AdminLockersIndex();
 
                   // Authentication routes
-                  case AuthLoginView.routeName:
-                    return const AuthLoginView();
+                  case OnboardingView.routeName:
+                    return const OnboardingView();
 
                   case AuthRegisterView.routeName:
                     return const AuthRegisterView();
