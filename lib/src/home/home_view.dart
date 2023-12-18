@@ -1,3 +1,5 @@
+import 'package:Leenloket/src/home/components/animated_bar.dart';
+import 'package:Leenloket/src/utils/rive_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -10,6 +12,7 @@ import 'package:Leenloket/src/reservations/user__reservations__index.dart';
 import 'package:Leenloket/src/shop/shop__index_view.dart';
 import 'package:Leenloket/src/shop/shop__item__single_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:rive/rive.dart';
 import '../settings/settings_view.dart';
 
 /// Displays a list of SampleItems.
@@ -27,7 +30,8 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final ref = FirebaseDatabase.instance.ref('Items');
   int currentIndex = 0;
-  final PageController _pageController = PageController();
+
+  RiveAsset selectedBottomNav = bottomNavs.first;
 
   @override
   Widget build(BuildContext context) {
@@ -38,48 +42,82 @@ class _HomeViewState extends State<HomeView> {
     ];
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Hello, Friend"), actions: [
-        InkWell(
+        appBar: AppBar(title: const Text("Hello, Friend"), actions: [
+          InkWell(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
+              child: const ProfilePicture(
+                name: "Fred",
+                radius: 25,
+                fontsize: 21,
+              ),
+            ),
+            onTap: () {
+              Navigator.restorablePushNamed(context, SettingsView.routeName);
+            },
+          )
+        ]),
+        body: pages[currentIndex],
+        bottomNavigationBar: SafeArea(
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-            child: const ProfilePicture(
-              name: "Fred",
-              radius: 25,
-              fontsize: 21,
+            padding: const EdgeInsets.all(12),
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            decoration: const BoxDecoration(
+              color: Colors.red,
+              borderRadius: BorderRadius.all(Radius.circular(24)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ...List.generate(
+                    bottomNavs.length,
+                    (index) => GestureDetector(
+                        onTap: () {
+                          bottomNavs[index].input!.change(true);
+                          if (bottomNavs[index] != selectedBottomNav) {
+                            setState(() {
+                              selectedBottomNav = bottomNavs[index];
+                              currentIndex = index;
+                            });
+                          }
+                          Future.delayed(const Duration(seconds: 2), () {
+                            bottomNavs[index].input!.change(false);
+                          });
+                        },
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            AnimatedBar(
+                              isActive: bottomNavs[index] == selectedBottomNav,
+                            ),
+                            SizedBox(
+                              height: 36,
+                              width: 36,
+                              child: Opacity(
+                                opacity: bottomNavs[index] == selectedBottomNav
+                                    ? 1
+                                    : 0.5,
+                                child: RiveAnimation.asset(
+                                  bottomNavs.first.src,
+                                  artboard: bottomNavs[index].artboard,
+                                  onInit: (artboard) {
+                                    StateMachineController controller =
+                                        RiveUtils.getRiveController(artboard,
+                                            stateMachineName: bottomNavs[index]
+                                                .stateMachineName);
+
+                                    bottomNavs[index].input =
+                                        controller.findSMI("active") as SMIBool;
+                                  },
+                                ),
+                              ),
+                            ),
+                          ],
+                        )))
+              ],
             ),
           ),
-          onTap: () {
-            Navigator.restorablePushNamed(context, SettingsView.routeName);
-          },
-        )
-      ]),
-      body: pages[currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFFD7263D),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.black,
-        currentIndex: currentIndex,
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: 'Items',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_today),
-            label: 'My Reservations',
-          ),
-        ],
-      ),
-    );
+        ));
   }
 }
 
@@ -134,9 +172,9 @@ class HomePageView extends StatelessWidget {
                                 imageUrl:
                                     snapshot.child('ImageUrl').value.toString(),
                                 placeholder: (context, url) =>
-                                    CircularProgressIndicator(),
+                                    const CircularProgressIndicator(),
                                 errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
+                                    const Icon(Icons.error),
                                 fit: BoxFit
                                     .cover, // Ensures the image covers the container
                               ),
@@ -161,3 +199,29 @@ class HomePageView extends StatelessWidget {
     );
   }
 }
+
+class RiveAsset {
+  final String artboard, stateMachineName, title, src;
+  late SMIBool? input;
+
+  RiveAsset(this.src,
+      {required this.artboard,
+      required this.stateMachineName,
+      required this.title,
+      this.input});
+
+  set setInput(SMIBool status) {
+    input = status;
+  }
+}
+
+List<RiveAsset> bottomNavs = [
+  RiveAsset("assets/rive/navigationbar_icons.riv",
+      artboard: "HOME", stateMachineName: "HOME_interactivity", title: "Home"),
+  RiveAsset("assets/rive/navigationbar_icons.riv",
+      artboard: "SEARCH",
+      stateMachineName: "SEARCH_Interactivity",
+      title: "SEARCH"),
+  RiveAsset("assets/rive/navigationbar_icons.riv",
+      artboard: "USER", stateMachineName: "USER_Interactivity", title: "ME"),
+];

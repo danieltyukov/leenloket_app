@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:Leenloket/src/home/admin__home_view.dart';
 import 'package:Leenloket/src/home/home_view.dart';
+import 'package:Leenloket/src/utils/rive_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,15 +30,6 @@ class _SignInFormState extends State<SignInForm> {
   late SMITrigger check;
   late SMITrigger error;
   late SMITrigger reset;
-
-  StateMachineController getRiveController(Artboard artboard) {
-    StateMachineController? controller =
-        StateMachineController.fromArtboard(artboard, "State Machine 1");
-
-    artboard.addController(controller!);
-
-    return controller;
-  }
 
   Future<void> _loginUser(
       BuildContext context, String email, String password) async {
@@ -181,7 +173,7 @@ class _SignInFormState extends State<SignInForm> {
                     child: RiveAnimation.asset("assets/rive/checkerror.riv",
                         onInit: (artboard) {
                       StateMachineController controller =
-                          getRiveController(artboard);
+                          RiveUtils.getRiveController(artboard);
                       check = controller.findSMI("Check") as SMITrigger;
                       error = controller.findSMI("Error") as SMITrigger;
                       reset = controller.findSMI("Reset") as SMITrigger;
