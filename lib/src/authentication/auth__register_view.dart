@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
-import 'package:Leenloket/src/authentication/auth__login_view.dart';
 import 'package:Leenloket/src/models/user_model.dart' as UserModel;
 
 class AuthRegisterView extends StatelessWidget {
@@ -35,7 +34,7 @@ class AuthRegisterView extends StatelessWidget {
             FirebaseDatabase.instance.ref("Users/${firebaseUser.uid}");
         await ref.set(user.toJson());
 
-        Navigator.of(context).pushReplacementNamed(AuthLoginView.routeName);
+        Navigator.of(context).pushReplacementNamed(OnboardingView.routeName);
       }
     } on FirebaseAuthException catch (e) {
       // Handle login error
