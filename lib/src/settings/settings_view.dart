@@ -60,7 +60,7 @@ class SettingsView extends StatelessWidget {
               onPressed: () {
                 _logout();
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/login',
+                  '/onboarding',
                   (route) => false,
                 );
               },

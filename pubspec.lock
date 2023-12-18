@@ -161,6 +161,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  cupertino_icons:
+    dependency: "direct main"
+    description:
+      name: cupertino_icons
+      sha256: d57953e10f9f8327ce64a508a355f0b1ec902193f66288e8cb5070e7c47eeb2d
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.6"
   date_field:
     dependency: "direct main"
     description:
@@ -395,6 +403,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  flutter_svg:
+    dependency: "direct main"
+    description:
+      name: flutter_svg
+      sha256: d39e7f95621fc84376bc0f7d504f05c3a41488c562f4a8ad410569127507402c
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.9"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -461,6 +477,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.12.1"
+  graphs:
+    dependency: transitive
+    description:
+      name: graphs
+      sha256: aedc5a15e78fc65a6e23bcd927f24c64dd995062bcd1ca6eda65a3cff92a4d19
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.1"
   html:
     dependency: transitive
     description:
@@ -645,6 +669,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.3"
+  path_parsing:
+    dependency: transitive
+    description:
+      name: path_parsing
+      sha256: e3e67b1629e6f7e8100b367d3db6ba6af4b1f0bb80f64db18ef1fbabd2fa9ccf
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   path_provider:
     dependency: transitive
     description:
@@ -749,6 +781,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
+  rive:
+    dependency: "direct main"
+    description:
+      name: rive
+      sha256: fd15b219f5cc110285ebf52093b0b0f4038c3ca750f2fc5fc44d9c80a56c44f3
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.12.3"
+  rive_common:
+    dependency: transitive
+    description:
+      name: rive_common
+      sha256: f4e20d0a99c5040c85624a3eb2b0b6b19e614d93a693c3bb25cf6e7bb2d3d6d3
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.8"
   rxdart:
     dependency: transitive
     description:
@@ -866,6 +914,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.2.1"
+  vector_graphics:
+    dependency: transitive
+    description:
+      name: vector_graphics
+      sha256: "0f0c746dd2d6254a0057218ff980fc7f5670fd0fcf5e4db38a490d31eed4ad43"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.9+1"
+  vector_graphics_codec:
+    dependency: transitive
+    description:
+      name: vector_graphics_codec
+      sha256: "0edf6d630d1bfd5589114138ed8fada3234deacc37966bec033d3047c29248b7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.9+1"
+  vector_graphics_compiler:
+    dependency: transitive
+    description:
+      name: vector_graphics_compiler
+      sha256: d24333727332d9bd20990f1483af4e09abdb9b1fc7c3db940b56ab5c42790c26
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.9+1"
   vector_math:
     dependency: transitive
     description:

@@ -1,3 +1,4 @@
+import 'package:Leenloket/src/authentication/auth__onboarding_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -114,7 +115,7 @@ class AuthRegisterView extends StatelessWidget {
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(AuthLoginView.routeName);
+                  Navigator.of(context).pushNamed(OnboardingView.routeName);
                 },
                 child: const Text('Already have an account? Log in'),
               ),

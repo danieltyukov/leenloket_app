@@ -32,6 +32,9 @@ dependencies:
   image_picker: ^1.0.4
   cached_network_image: ^3.3.0
   flutter_launcher_icons: ^0.13.1
+  flutter_svg: ^2.0.9
+  rive: ^0.12.3
+  cupertino_icons: ^1.0.6
 
 dev_dependencies:
   flutter_test:
@@ -64,12 +67,58 @@ flutter_native_splash:
   android: true
   ios: true
 
+
 flutter:
+# -----------------------------------------------
+#   FLUTTER CONFIGURATION
+# -----------------------------------------------
+#
+# The following section is specific to Flutter.
+#
+
   uses-material-design: true
+
+# -----------------------------------------------
+#   LOCALIZATION
+# -----------------------------------------------
+#
+# Localization configuration. This will generate the necessary files for localization.
+#
+# For more information, see: https://flutter.dev/docs/development/accessibility-and-localization/internationalization
+#
 
   # Enable generation of localized Strings from arb files.
   generate: true
 
+
+# -----------------------------------------------
+#   ASSETS
+# -----------------------------------------------
+#
+# Assets that are using within the app. Each asset should have a key and a list of assets.
+#
+
+
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - assets/rive/
+
+
+# -----------------------------------------------
+#   FONTS
+# -----------------------------------------------
+#
+# Fonts that are using within the app. Each font should have a family entry and each family 
+# should have a list of fonts.
+#
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 700
