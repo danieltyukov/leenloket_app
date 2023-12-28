@@ -1,4 +1,4 @@
-import 'package:Leenloket/src/reservations/user__reservations__index.dart';
+import 'package:Leenloket/src/views/user/reservations/user__reservations__index.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 

@@ -1,5 +1,5 @@
-import 'package:Leenloket/src/authentication/auth__register_view.dart';
-import 'package:Leenloket/src/authentication/components/auth__sign_in__form.dart';
+import 'package:Leenloket/src/views/authentication/auth__register_view.dart';
+import 'package:Leenloket/src/views/authentication/components/auth__sign_in__form.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

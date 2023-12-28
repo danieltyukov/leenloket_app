@@ -1,24 +1,22 @@
-import 'package:Leenloket/src/authentication/auth__onboarding_view.dart';
+import 'package:Leenloket/src/views/admin/Categories/admin__categories__index.dart';
+import 'package:Leenloket/src/views/admin/admin__items__index.dart';
+import 'package:Leenloket/src/views/admin/home/admin__home_view.dart';
+import 'package:Leenloket/src/views/admin/lockers/admin__lockers__index.dart';
+import 'package:Leenloket/src/views/admin/reservations/admin__reservations__index.dart';
+import 'package:Leenloket/src/views/authentication/auth__onboarding_view.dart';
+import 'package:Leenloket/src/views/user/reserving/reserving__item__confirmation_view.dart';
+import 'package:Leenloket/src/views/user/reserving/reserving__item__overview_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:Leenloket/src/admin/Categories/admin__categories__index.dart';
-import 'package:Leenloket/src/admin/admin__items__index.dart';
-import 'package:Leenloket/src/admin/lockers/admin__lockers__index.dart';
-import 'package:Leenloket/src/admin/reservations/admin__reservations__index.dart';
-import 'package:Leenloket/src/authentication/auth__register_view.dart';
-import 'package:Leenloket/src/home/admin__home_view.dart';
-import 'package:Leenloket/src/home/home_view.dart';
-import 'package:Leenloket/src/reservations/user__reservations__index.dart';
-import 'package:Leenloket/src/reservations/user__reservations__single.dart';
-import 'package:Leenloket/src/reserving/reserving__item__confirmation_view.dart';
-import 'package:Leenloket/src/reserving/reserving__item__overview_view.dart';
-import 'package:Leenloket/src/roles/role__selector_view.dart';
-
-import 'shop/shop__item__single_view.dart';
-import 'shop/shop__index_view.dart';
-import 'settings/settings_controller.dart';
-import 'settings/settings_view.dart';
+import 'package:Leenloket/src/views/authentication/auth__register_view.dart';
+import 'package:Leenloket/src/views/user/home/home_view.dart';
+import 'package:Leenloket/src/views/user/reservations/user__reservations__index.dart';
+import 'package:Leenloket/src/views/user/reservations/user__reservations__single.dart';
+import 'package:Leenloket/src/views/user/shop/shop__item__single_view.dart';
+import 'package:Leenloket/src/views/user/shop/shop__index_view.dart';
+import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
+import 'package:Leenloket/src/views/user/settings/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -77,10 +75,6 @@ class MyApp extends StatelessWidget {
 
                   case AuthRegisterView.routeName:
                     return const AuthRegisterView();
-
-                  // Role routes
-                  case RoleSelectorView.routeName:
-                    return const RoleSelectorView();
 
                   // Settings routes
                   case SettingsView.routeName:

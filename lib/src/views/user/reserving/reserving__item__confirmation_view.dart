@@ -1,6 +1,6 @@
-import 'package:Leenloket/src/reservations/user__reservations__single.dart';
+import 'package:Leenloket/src/views/user/reservations/user__reservations__single.dart';
 import 'package:flutter/material.dart';
-import 'package:Leenloket/src/home/home_view.dart';
+import 'package:Leenloket/src/views/user/home/home_view.dart';
 
 class ReservingItemConfirmation extends StatefulWidget {
   final String reservationId;

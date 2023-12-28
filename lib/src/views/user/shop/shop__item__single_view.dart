@@ -1,7 +1,7 @@
+import 'package:Leenloket/src/views/user/reserving/reserving__item__overview_view.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:Leenloket/src/reserving/reserving__item__overview_view.dart';
 
 /// Displays detailed information about a SampleItem.
 class ShopItemSingleView extends StatefulWidget {

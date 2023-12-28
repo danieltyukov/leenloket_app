@@ -1,8 +1,6 @@
-import 'dart:io';
-
-import 'package:Leenloket/src/home/admin__home_view.dart';
-import 'package:Leenloket/src/home/home_view.dart';
 import 'package:Leenloket/src/utils/rive_utils.dart';
+import 'package:Leenloket/src/views/admin/home/admin__home_view.dart';
+import 'package:Leenloket/src/views/user/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';

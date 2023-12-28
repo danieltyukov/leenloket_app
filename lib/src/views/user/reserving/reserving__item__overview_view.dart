@@ -1,11 +1,11 @@
 import 'dart:math';
 
+import 'package:Leenloket/src/views/user/reserving/reserving__item__confirmation_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:date_field/date_field.dart';
 import 'package:flutter/services.dart';
-import 'package:Leenloket/src/reserving/reserving__item__confirmation_view.dart';
 
 class ReservingItemOverviewView extends StatefulWidget {
   String itemId;

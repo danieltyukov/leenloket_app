@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:Leenloket/src/reservations/user__reservations__single.dart';
+import 'package:Leenloket/src/views/user/reservations/user__reservations__single.dart';
 
 class UserReservationsIndex extends StatefulWidget {
   const UserReservationsIndex({Key? key}) : super(key: key);

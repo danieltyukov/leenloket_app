@@ -1,10 +1,9 @@
 import 'dart:ui';
 
-import 'package:Leenloket/src/authentication/auth__register_view.dart';
-import 'package:Leenloket/src/authentication/components/auth__custom__sign_in__diagalog.dart';
-import 'package:Leenloket/src/authentication/components/auth__sign_in__form.dart';
-import 'package:Leenloket/src/home/admin__home_view.dart';
-import 'package:Leenloket/src/home/home_view.dart';
+import 'package:Leenloket/src/views/authentication/auth__register_view.dart';
+import 'package:Leenloket/src/views/authentication/components/auth__custom__sign_in__diagalog.dart';
+import 'package:Leenloket/src/views/authentication/components/auth__sign_in__form.dart';
+import 'package:Leenloket/src/views/user/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
