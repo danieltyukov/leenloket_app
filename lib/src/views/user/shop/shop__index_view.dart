@@ -43,9 +43,6 @@ class _SampleItemListViewState extends State<SampleItemListView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Items List'),
-      ),
       body: Column(
         children: [
           _buildFilterOptions(),

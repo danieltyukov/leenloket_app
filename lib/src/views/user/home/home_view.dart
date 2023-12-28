@@ -1,9 +1,10 @@
 import 'package:Leenloket/src/utils/rive_utils.dart';
 import 'package:Leenloket/src/views/user/home/components/animated_bar.dart';
+import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
+import 'package:Leenloket/src/views/user/settings/settings_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:Leenloket/src/views/user/reservations/user__reservations__index.dart';
 import 'package:Leenloket/src/views/user/shop/shop__index_view.dart';
 import 'package:Leenloket/src/views/user/shop/shop__item__single_view.dart';
@@ -29,30 +30,27 @@ class _HomeViewState extends State<HomeView> {
 
   RiveAsset selectedBottomNav = bottomNavs.first;
 
+  late SettingsController _settingsController;
+
+  @override
+  void initState() {
+    super.initState();
+    // Instantiate SettingsController in initState
+    _settingsController = SettingsController(SettingsService());
+    // Load settings when the widget is initialized
+    _settingsController.loadSettings();
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       HomePageView(),
       const SampleItemListView(),
       const UserReservationsIndex(),
+      SettingsView(controller: _settingsController),
     ];
 
     return Scaffold(
-        appBar: AppBar(title: const Text("Hello, Friend"), actions: [
-          InkWell(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-              child: const ProfilePicture(
-                name: "Fred",
-                radius: 25,
-                fontsize: 21,
-              ),
-            ),
-            onTap: () {
-              Navigator.restorablePushNamed(context, SettingsView.routeName);
-            },
-          )
-        ]),
         body: pages[currentIndex],
         bottomNavigationBar: SafeArea(
           child: Container(
@@ -220,4 +218,8 @@ List<RiveAsset> bottomNavs = [
       title: "SEARCH"),
   RiveAsset("assets/rive/navigationbar_icons.riv",
       artboard: "USER", stateMachineName: "USER_Interactivity", title: "ME"),
+  RiveAsset("assets/rive/navigationbar_icons.riv",
+      artboard: "SETTINGS",
+      stateMachineName: "SETTINGS_Interactivity",
+      title: "SETTINGS"),
 ];
