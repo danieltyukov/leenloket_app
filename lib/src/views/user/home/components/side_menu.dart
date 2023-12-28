@@ -24,49 +24,64 @@ class _SideMenuState extends State<SideMenu> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.red,
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          const DrawerHeader(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(1.0),
-                  bottomRight: Radius.circular(1.0),
-                ),
-                color: Colors.white,
-                image: DecorationImage(
-                    fit: BoxFit.fill, image: AssetImage('assets/bg.jpeg'))),
-            child: Text('DevHubSpot',
-                style: TextStyle(color: Colors.white, fontSize: 25)),
+          const SizedBox(
+            height: 50,
           ),
           ListTile(
-            leading: const Icon(Icons.home_filled),
-            title: const Text("Home"),
+            leading: const Icon(
+              Icons.home_filled,
+              color: Colors.white,
+            ),
+            title: const Text(
+              "Home",
+              style: TextStyle(color: Colors.white),
+            ),
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => HomeView(currentIndex: 0)))
             },
           ),
           ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text("Profile"),
+            leading: const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
+            title: const Text(
+              "Shop",
+              style: TextStyle(color: Colors.white),
+            ),
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => HomeView(currentIndex: 1)))
             },
           ),
           ListTile(
-            leading: const Icon(Icons.person_pin_outlined),
-            title: const Text("Team"),
+            leading: const Icon(
+              Icons.person,
+              color: Colors.white,
+            ),
+            title: const Text(
+              "My Reservations",
+              style: TextStyle(color: Colors.white),
+            ),
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => HomeView(currentIndex: 2)))
             },
           ),
           ListTile(
-            leading: const Icon(Icons.more_horiz_outlined),
-            title: const Text("More"),
+            leading: const Icon(
+              Icons.settings,
+              color: Colors.white,
+            ),
+            title: const Text(
+              "Settings",
+              style: TextStyle(color: Colors.white),
+            ),
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) =>
