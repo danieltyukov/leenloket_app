@@ -1,3 +1,4 @@
+import 'package:Leenloket/src/views/user/home/components/side_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -22,6 +23,10 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Settings'),
+      ),
+      drawer: SideMenu(),
       body: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(

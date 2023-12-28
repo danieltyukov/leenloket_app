@@ -82,7 +82,9 @@ class MyApp extends StatelessWidget {
 
                   // Home routes
                   case HomeView.routeName:
-                    return const HomeView();
+                    return HomeView(
+                      currentIndex: 0,
+                    );
 
                   case UserReservationsIndex.routeName:
                     return const UserReservationsIndex();

@@ -50,11 +50,17 @@ class _SignInFormState extends State<SignInForm> {
           final user = UserModel.User.fromJson(data);
 
           if (user.roleID == "r1") {
-            Navigator.of(context).pushReplacementNamed(AdminHomeView.routeName);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              AdminHomeView.routeName,
+              (route) => false,
+            );
           }
 
           if (user.roleID == "r2") {
-            Navigator.of(context).pushReplacementNamed(HomeView.routeName);
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              HomeView.routeName,
+              (route) => false,
+            );
           }
         }
       }

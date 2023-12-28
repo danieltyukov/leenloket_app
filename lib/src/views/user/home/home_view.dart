@@ -1,5 +1,6 @@
 import 'package:Leenloket/src/utils/rive_utils.dart';
 import 'package:Leenloket/src/views/user/home/components/animated_bar.dart';
+import 'package:Leenloket/src/views/user/home/components/side_menu.dart';
 import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
 import 'package:Leenloket/src/views/user/settings/settings_service.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -14,10 +15,12 @@ import '../settings/settings_view.dart';
 
 /// Displays a list of SampleItems.
 class HomeView extends StatefulWidget {
-  const HomeView({
+  HomeView({
+    required this.currentIndex,
     super.key,
   });
 
+  int currentIndex = 0;
   static const routeName = '/home';
 
   @override
@@ -26,9 +29,8 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final ref = FirebaseDatabase.instance.ref('Items');
-  int currentIndex = 0;
 
-  RiveAsset selectedBottomNav = bottomNavs.first;
+  RiveAsset selectedBottomNav = bottomNavs[0];
 
   late SettingsController _settingsController;
 
@@ -39,6 +41,7 @@ class _HomeViewState extends State<HomeView> {
     _settingsController = SettingsController(SettingsService());
     // Load settings when the widget is initialized
     _settingsController.loadSettings();
+    selectedBottomNav = bottomNavs[widget.currentIndex];
   }
 
   @override
@@ -47,11 +50,12 @@ class _HomeViewState extends State<HomeView> {
       HomePageView(),
       const SampleItemListView(),
       const UserReservationsIndex(),
-      SettingsView(controller: _settingsController),
     ];
 
     return Scaffold(
-        body: pages[currentIndex],
+        drawer: SideMenu(),
+        appBar: AppBar(),
+        body: pages[widget.currentIndex],
         bottomNavigationBar: SafeArea(
           child: Container(
             padding: const EdgeInsets.all(12),
@@ -71,7 +75,7 @@ class _HomeViewState extends State<HomeView> {
                           if (bottomNavs[index] != selectedBottomNav) {
                             setState(() {
                               selectedBottomNav = bottomNavs[index];
-                              currentIndex = index;
+                              widget.currentIndex = index;
                             });
                           }
                           Future.delayed(const Duration(seconds: 2), () {
@@ -218,8 +222,4 @@ List<RiveAsset> bottomNavs = [
       title: "SEARCH"),
   RiveAsset("assets/rive/navigationbar_icons.riv",
       artboard: "USER", stateMachineName: "USER_Interactivity", title: "ME"),
-  RiveAsset("assets/rive/navigationbar_icons.riv",
-      artboard: "SETTINGS",
-      stateMachineName: "SETTINGS_Interactivity",
-      title: "SETTINGS"),
 ];
