@@ -1,4 +1,6 @@
+import 'package:Leenloket/src/views/authentication/auth__onboarding_view.dart';
 import 'package:Leenloket/src/views/user/home/components/side_menu.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -16,8 +18,7 @@ class SettingsView extends StatelessWidget {
   final SettingsController controller;
 
   Future<void> _logout() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    await googleSignIn.signOut();
+    FirebaseAuth.instance.signOut();
   }
 
   @override
@@ -59,10 +60,10 @@ class SettingsView extends StatelessWidget {
               height: 20,
             ),
             ElevatedButton(
-              onPressed: () {
-                _logout();
+              onPressed: () async {
+                await _logout();
                 Navigator.of(context).pushNamedAndRemoveUntil(
-                  '/onboarding',
+                  OnboardingView.routeName,
                   (route) => false,
                 );
               },

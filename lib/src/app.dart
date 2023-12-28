@@ -6,6 +6,8 @@ import 'package:Leenloket/src/views/admin/reservations/admin__reservations__inde
 import 'package:Leenloket/src/views/authentication/auth__onboarding_view.dart';
 import 'package:Leenloket/src/views/user/reserving/reserving__item__confirmation_view.dart';
 import 'package:Leenloket/src/views/user/reserving/reserving__item__overview_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -19,7 +21,7 @@ import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
 import 'package:Leenloket/src/views/user/settings/settings_view.dart';
 
 /// The Widget that configures your application.
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({
     super.key,
     required this.settingsController,
@@ -28,9 +30,33 @@ class MyApp extends StatelessWidget {
   final SettingsController settingsController;
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  var auth = FirebaseAuth.instance;
+  var isLogedIn = false;
+
+  checkIfLogin() async {
+    auth.authStateChanges().listen((User? user) {
+      if (user != null && mounted) {
+        setState(() {
+          isLogedIn = true;
+        });
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    checkIfLogin();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: settingsController,
+      listenable: widget.settingsController,
       builder: (BuildContext context, Widget? child) {
         return MaterialApp(
           restorationScopeId: 'app',
@@ -49,7 +75,7 @@ class MyApp extends StatelessWidget {
             primaryColor: Colors.blue,
           ),
           darkTheme: ThemeData.dark(),
-          themeMode: settingsController.themeMode,
+          themeMode: widget.settingsController.themeMode,
           onGenerateRoute: (RouteSettings routeSettings) {
             return MaterialPageRoute<void>(
               settings: routeSettings,
@@ -78,7 +104,7 @@ class MyApp extends StatelessWidget {
 
                   // Settings routes
                   case SettingsView.routeName:
-                    return SettingsView(controller: settingsController);
+                    return SettingsView(controller: widget.settingsController);
 
                   // Home routes
                   case HomeView.routeName:
@@ -149,7 +175,11 @@ class MyApp extends StatelessWidget {
 
                   // Default route
                   default:
-                    return const OnboardingView();
+                    return isLogedIn
+                        ? HomeView(
+                            currentIndex: 0,
+                          )
+                        : const OnboardingView();
                 }
               },
             );
