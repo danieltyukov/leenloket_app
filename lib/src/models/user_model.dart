@@ -1,3 +1,4 @@
+import 'package:Leenloket/src/models/credit_transaction_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class User {
@@ -55,6 +56,11 @@ class User {
     DataSnapshot snapshot = await _userRef.get();
 
     return snapshot.child('RoleID').value.toString();
+  }
+
+  // Return user name
+  Future<String> fetchName() async {
+    return name;
   }
 
   ////////////////////////////////////////////
@@ -181,5 +187,33 @@ class User {
       'Amount': amount.toStringAsFixed(2),
       'Date': DateTime.now().toString(),
     });
+  }
+
+  // Get all credit transactions of the user
+  Future<List<CreditTransaction>> fetchCreditTransactions() async {
+    late DatabaseReference creditTransactionsRef =
+        FirebaseDatabase.instance.ref('CreditTransactions');
+    DataSnapshot snapshot = await creditTransactionsRef.get();
+    List<CreditTransaction> creditTransactions = [];
+
+    if (snapshot.exists) {
+      Map<dynamic, dynamic> values = snapshot.value as Map;
+      values.forEach((key, value) {
+        if (value['UserID'] == id) {
+          // Only add transactions with the specified user ID
+          CreditTransaction ct = CreditTransaction(
+            id: key,
+            amount: double.parse(value['Amount']),
+            userID: value['UserID'],
+            creditHolderID: value['CreditHolderID'],
+            type: value['Type'],
+            date: value['Date'],
+          );
+          creditTransactions.add(ct);
+        }
+      });
+    }
+
+    return creditTransactions;
   }
 }

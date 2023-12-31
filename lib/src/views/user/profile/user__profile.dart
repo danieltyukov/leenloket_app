@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:Leenloket/src/utils/authentication_functions.dart';
 import 'package:Leenloket/src/views/authentication/auth__onboarding_view.dart';
+import 'package:Leenloket/src/views/user/credit/user__credit__view.dart';
 import 'package:Leenloket/src/views/user/home/components/side_menu.dart';
 import 'package:Leenloket/src/views/user/reservations/user__reservations__index.dart';
 import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
@@ -24,15 +27,30 @@ class _UserProfileViewState extends State<UserProfileView> {
   late UserModel.User user;
   late SettingsController _settingsController;
   late Future<User> fireBaseUser;
+  late UserModel.User currentUser;
 
   @override
   void initState() {
     super.initState();
-    fireBaseUser = getCurrentAuthenticatedFirebaseUser();
     // Instantiate SettingsController in initState
     _settingsController = SettingsController(SettingsService());
     // Load settings when the widget is initialized
     _settingsController.loadSettings();
+  }
+
+  Future<UserModel.User> getUser() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final ref = FirebaseDatabase.instance.ref("Users/$uid");
+    final snapshot = await ref.get();
+
+    if (snapshot.exists && snapshot.value is Map) {
+      final data = Map<String, dynamic>.from(snapshot.value as Map);
+      final user = UserModel.User.fromJson(data, uid);
+      currentUser = user;
+      return user;
+    } else {
+      throw Exception('User not found');
+    }
   }
 
   @override
@@ -54,19 +72,39 @@ class _UserProfileViewState extends State<UserProfileView> {
                 height: 20,
               ),
               FutureBuilder(
-                future: fireBaseUser,
-                builder: (context, AsyncSnapshot<User> snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(
-                      snapshot.data!.email!,
-                      style: const TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    );
-                  } else {
-                    return const Text('Loading...');
-                  }
-                },
-              ),
+                  future: getUser(),
+                  builder: (context, AsyncSnapshot<UserModel.User> snapshot) {
+                    if (snapshot.hasData) {
+                      return Column(
+                        children: [
+                          Text(
+                            currentUser.email,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          FutureBuilder(
+                              future: currentUser.fetchDoubleCredit(),
+                              builder:
+                                  (context, AsyncSnapshot<double> snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text('€ ${snapshot.data}',
+                                      style: const TextStyle(
+                                        fontSize: 30,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.red,
+                                      ));
+                                } else {
+                                  return const CircularProgressIndicator();
+                                }
+                              }),
+                        ],
+                      );
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  }),
               const SizedBox(
                 height: 20,
               ),
@@ -102,7 +140,9 @@ class _UserProfileViewState extends State<UserProfileView> {
                 icon: Icons.euro,
                 press: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const UserReservationsIndex()));
+                      builder: (context) => UserCreditView(
+                            currentUser: currentUser,
+                          )));
                 },
                 endIcon: true,
                 buttonColor: Colors.red,

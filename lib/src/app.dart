@@ -5,6 +5,7 @@ import 'package:Leenloket/src/views/admin/lockers/admin__lockers__index.dart';
 import 'package:Leenloket/src/views/admin/reservations/admin__reservations__index.dart';
 import 'package:Leenloket/src/views/admin/users/admin__users__index.dart';
 import 'package:Leenloket/src/views/authentication/auth__onboarding_view.dart';
+import 'package:Leenloket/src/views/user/credit/user__credit__view.dart';
 import 'package:Leenloket/src/views/user/reserving/reserving__item__confirmation_view.dart';
 import 'package:Leenloket/src/views/user/reserving/reserving__item__overview_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -175,6 +176,19 @@ class _MyAppState extends State<MyApp> {
                           args['reservationId'] as String;
                       return ReservingItemConfirmation(
                           reservationId: reservationId);
+                    } else {
+                      // Handle missing or invalid arguments
+                      return const SizedBox.shrink();
+                    }
+
+                  case UserCreditView.routeName:
+                    // Extract user model from router args
+                    final Map<String, dynamic>? args =
+                        routeSettings.arguments as Map<String, dynamic>?;
+                    if (args != null && args.containsKey('user')) {
+                      final userModel.User user =
+                          args['user'] as userModel.User;
+                      return UserCreditView(currentUser: user);
                     } else {
                       // Handle missing or invalid arguments
                       return const SizedBox.shrink();
