@@ -1,8 +1,10 @@
+import 'package:Leenloket/src/utils/authentication_functions.dart';
 import 'package:Leenloket/src/views/admin/Categories/admin__categories__index.dart';
 import 'package:Leenloket/src/views/admin/items/admin__items__index.dart';
 import 'package:Leenloket/src/views/admin/lockers/admin__lockers__index.dart';
 import 'package:Leenloket/src/views/admin/reservations/admin__reservations__index.dart';
 import 'package:Leenloket/src/views/admin/users/admin__users__index.dart';
+import 'package:Leenloket/src/views/authentication/auth__onboarding_view.dart';
 import 'package:flutter/material.dart';
 import 'package:Leenloket/src/widgets/customButton.dart';
 
@@ -25,6 +27,19 @@ class _AdminHomeViewState extends State<AdminHomeView> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: const Text('Admin Home'),
+          actions: [
+            //logout
+            IconButton(
+              onPressed: () async {
+                await firebaseLogout();
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  OnboardingView.routeName,
+                  (route) => false,
+                );
+              },
+              icon: const Icon(Icons.logout),
+            ),
+          ],
         ),
         body: GridView.count(
           crossAxisCount: 2,

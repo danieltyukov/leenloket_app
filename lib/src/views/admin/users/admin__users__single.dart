@@ -30,7 +30,6 @@ class _AdminUserSingle extends State<AdminUserSingle> {
 
   @override
   Widget build(BuildContext context) {
-    Credit creditInstance = Credit(credit: 0.00, userID: widget.userID);
     userModel.User selectedUser;
 
     return Scaffold(
@@ -121,7 +120,7 @@ class _AdminUserSingle extends State<AdminUserSingle> {
                             return Card(
                               child: ListTile(
                                 title: const Text('Credit'),
-                                trailing: Text(snapshot.data.toString()),
+                                trailing: Text("€${snapshot.data.toString()}"),
                               ),
                             );
                           }
@@ -181,11 +180,19 @@ class AddCreditDialog extends StatelessWidget {
                 onPressed: () async {
                   if (amountController.text.isNotEmpty) {
                     final double amount = double.parse(amountController.text);
+                    if (await selectedUser.hasCreditHolder()) {
+                      await selectedUser.topCredit(amount);
+                    } else {
+                      await selectedUser.createCredit(amount);
+                    }
+                    selectedUser.createCreditTransaction("Admin Topup", amount);
 
-                    selectedUser.topCredit(amount);
+                    //navigate to the current page
+                    // ignore: use_build_context_synchronously
+                    Navigator.pushReplacementNamed(
+                        context, AdminUserSingle.routeName,
+                        arguments: selectedUser.id);
                   }
-                  // ignore: use_build_context_synchronously
-                  Navigator.pop(context);
                 },
                 child: const Text(
                   'Add credit',

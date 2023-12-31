@@ -35,7 +35,7 @@ class AuthRegisterView extends StatelessWidget {
             FirebaseDatabase.instance.ref("Users/${firebaseUser.uid}");
         await ref.set(user.toJson());
 
-        final creditRef = FirebaseDatabase.instance.ref('Credits');
+        final creditRef = FirebaseDatabase.instance.ref('CreditHolders');
 
         creditRef.push().set({
           'UserID': firebaseUser.uid,

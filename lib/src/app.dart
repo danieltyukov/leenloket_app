@@ -9,6 +9,7 @@ import 'package:Leenloket/src/views/user/reserving/reserving__item__confirmation
 import 'package:Leenloket/src/views/user/reserving/reserving__item__overview_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -20,6 +21,7 @@ import 'package:Leenloket/src/views/user/shop/shop__item__single_view.dart';
 import 'package:Leenloket/src/views/user/shop/shop__index_view.dart';
 import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
 import 'package:Leenloket/src/views/user/settings/settings_view.dart';
+import 'package:Leenloket/src/models/user_model.dart' as userModel;
 
 /// The Widget that configures your application.
 class MyApp extends StatefulWidget {
@@ -37,16 +39,31 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var auth = FirebaseAuth.instance;
   var isLogedIn = false;
-  String userRole = "r1";
+  String userRole = "r2";
 
   checkIfLogin() async {
     auth.authStateChanges().listen((User? user) {
       if (user != null && mounted) {
+        final uid = user.uid;
+        getUser(uid);
         setState(() {
           isLogedIn = true;
         });
       }
     });
+  }
+
+  getUser(uid) async {
+    final ref = FirebaseDatabase.instance.ref("Users/$uid");
+    final snapshot = await ref.get();
+
+    if (snapshot.exists && snapshot.value is Map) {
+      final data = Map<String, dynamic>.from(snapshot.value as Map);
+      final user = userModel.User.fromJson(data, uid);
+      setState(() {
+        userRole = user.roleID;
+      });
+    }
   }
 
   @override

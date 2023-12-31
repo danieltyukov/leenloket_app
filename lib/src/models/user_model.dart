@@ -42,9 +42,61 @@ class User {
     };
   }
 
+  ////////////////////////////////////////////
+  ////////////////////////////////////////////
+  ///        User Mehtods                  ///
+  ////////////////////////////////////////////
+  ////////////////////////////////////////////
+
+  // Get roleID of the user
+  Future<String> fetchRoleID() async {
+    late DatabaseReference _userRef =
+        FirebaseDatabase.instance.ref('Users/$id');
+    DataSnapshot snapshot = await _userRef.get();
+
+    return snapshot.child('RoleID').value.toString();
+  }
+
+  ////////////////////////////////////////////
+  ////////////////////////////////////////////
+  ///        Credit Mehtods                ///
+  ////////////////////////////////////////////
+  ////////////////////////////////////////////
+
+  // Check if credit exists
+  Future<bool> hasCreditHolder() async {
+    late DatabaseReference creditsRef =
+        FirebaseDatabase.instance.ref('CreditHolders');
+    DataSnapshot snapshot = await creditsRef.get();
+    bool hasCredit = false;
+
+    if (snapshot.exists) {
+      Map<dynamic, dynamic> values = snapshot.value as Map;
+      values.forEach((key, value) {
+        if (value['UserID'] == id) {
+          hasCredit = true;
+        }
+      });
+    }
+
+    return hasCredit;
+  }
+
+  // Create credit for the user
+  Future<void> createCredit(double amount) async {
+    late DatabaseReference creditsRef =
+        FirebaseDatabase.instance.ref('CreditHolders');
+
+    await creditsRef.push().set({
+      'UserID': id,
+      'Credit': amount.toStringAsFixed(2),
+    });
+  }
+
+  // Fetch the credit of the user
   Future<double> fetchDoubleCredit() async {
     late DatabaseReference creditsRef =
-        FirebaseDatabase.instance.ref('Credits');
+        FirebaseDatabase.instance.ref('CreditHolders');
     DataSnapshot snapshot = await creditsRef.get();
     double credit = 0.00;
 
@@ -52,7 +104,7 @@ class User {
       Map<dynamic, dynamic> values = snapshot.value as Map;
       values.forEach((key, value) {
         if (value['UserID'] == id) {
-          credit = value['Credit'] as double;
+          credit = double.parse(value['Credit']);
         }
       });
     }
@@ -60,9 +112,10 @@ class User {
     return credit;
   }
 
+  // Fetch the creditID of the user
   Future<String> fetchCreditID() async {
     late DatabaseReference creditsRef =
-        FirebaseDatabase.instance.ref('Credits');
+        FirebaseDatabase.instance.ref('CreditHolders');
     DataSnapshot snapshot = await creditsRef.get();
     String creditID = "";
 
@@ -78,15 +131,55 @@ class User {
     return creditID;
   }
 
+  // Top up the credit of the user
   Future<void> topCredit(double amount) async {
     String creditID = await fetchCreditID();
     double credit = await fetchDoubleCredit();
 
     late DatabaseReference creditsRef =
-        FirebaseDatabase.instance.ref('Credits/$creditID');
+        FirebaseDatabase.instance.ref('CreditHolders/$creditID');
 
     await creditsRef.update({
-      'Credit': credit + amount,
+      'Credit': (credit + amount).toStringAsFixed(2),
+    });
+  }
+
+  // Deduct the credit of the user
+  Future<void> deductCredit(double amount) async {
+    String creditID = await fetchCreditID();
+    double credit = await fetchDoubleCredit();
+
+    late DatabaseReference creditsRef =
+        FirebaseDatabase.instance.ref('CreditHolders/$creditID');
+
+    await creditsRef.update({
+      'Credit': (credit - amount).toStringAsFixed(2),
+    });
+  }
+
+  // Check if the user has enough credit
+  Future<bool> hasEnoughCredit(double amount) async {
+    double credit = await fetchDoubleCredit();
+    return credit >= amount;
+  }
+
+  ////////////////////////////////////////////
+  ////////////////////////////////////////////
+  ///   Credit Transaction Mehtods         ///
+  ////////////////////////////////////////////
+  ////////////////////////////////////////////
+
+  // Create a credit transaction
+  Future<void> createCreditTransaction(String type, double amount) async {
+    late DatabaseReference creditTransactionsRef =
+        FirebaseDatabase.instance.ref('CreditTransactions');
+
+    await creditTransactionsRef.push().set({
+      'UserID': id,
+      'CreditHolderID': await fetchCreditID(),
+      'Type': type,
+      'Amount': amount.toStringAsFixed(2),
+      'Date': DateTime.now().toString(),
     });
   }
 }
