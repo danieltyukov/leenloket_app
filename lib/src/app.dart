@@ -1,8 +1,9 @@
 import 'package:Leenloket/src/views/admin/Categories/admin__categories__index.dart';
-import 'package:Leenloket/src/views/admin/admin__items__index.dart';
+import 'package:Leenloket/src/views/admin/items/admin__items__index.dart';
 import 'package:Leenloket/src/views/admin/home/admin__home_view.dart';
 import 'package:Leenloket/src/views/admin/lockers/admin__lockers__index.dart';
 import 'package:Leenloket/src/views/admin/reservations/admin__reservations__index.dart';
+import 'package:Leenloket/src/views/admin/users/admin__users__index.dart';
 import 'package:Leenloket/src/views/authentication/auth__onboarding_view.dart';
 import 'package:Leenloket/src/views/user/reserving/reserving__item__confirmation_view.dart';
 import 'package:Leenloket/src/views/user/reserving/reserving__item__overview_view.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var auth = FirebaseAuth.instance;
   var isLogedIn = false;
+  String userRole = "r1";
 
   checkIfLogin() async {
     auth.authStateChanges().listen((User? user) {
@@ -94,6 +96,9 @@ class _MyAppState extends State<MyApp> {
 
                   case AdminLockersIndex.routeName:
                     return const AdminLockersIndex();
+
+                  case AdminUsersIndex.routeName:
+                    return const AdminUsersIndex();
 
                   // Authentication routes
                   case OnboardingView.routeName:
@@ -175,11 +180,17 @@ class _MyAppState extends State<MyApp> {
 
                   // Default route
                   default:
-                    return isLogedIn
-                        ? HomeView(
-                            currentIndex: 0,
-                          )
-                        : const OnboardingView();
+                    if (isLogedIn) {
+                      if (userRole == "r1") {
+                        return const AdminHomeView();
+                      } else {
+                        return HomeView(
+                          currentIndex: 0,
+                        );
+                      }
+                    } else {
+                      return const OnboardingView();
+                    }
                 }
               },
             );

@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class AdminIndexItems extends StatefulWidget {
-  const AdminIndexItems({Key? key}) : super(key: key);
+  const AdminIndexItems({super.key});
 
   static const routeName = '/admin/items/index';
 
@@ -59,6 +59,7 @@ class _AdminIndexItems extends State<AdminIndexItems> {
       );
     }).toList();
 
+    // ignore: use_build_context_synchronously
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -136,6 +137,7 @@ class _AdminIndexItems extends State<AdminIndexItems> {
                   'ImageUrl': imageUrl ?? '', // Store the image URL
                 });
               }
+              // ignore: use_build_context_synchronously
               Navigator.pop(context);
             },
             child: const Text('Create'),

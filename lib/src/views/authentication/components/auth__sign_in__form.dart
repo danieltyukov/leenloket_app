@@ -47,7 +47,7 @@ class _SignInFormState extends State<SignInForm> {
 
         if (snapshot.exists && snapshot.value is Map) {
           final data = Map<String, dynamic>.from(snapshot.value as Map);
-          final user = UserModel.User.fromJson(data);
+          final user = UserModel.User.fromJson(data, uid);
 
           if (user.roleID == "r1") {
             Navigator.of(context).pushNamedAndRemoveUntil(

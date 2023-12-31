@@ -22,6 +22,7 @@ class AuthRegisterView extends StatelessWidget {
         final passwordHash = sha256.convert(utf8.encode(password)).toString();
 
         final user = UserModel.User(
+          id: firebaseUser.uid,
           name: name,
           email: email,
           phone: phone,
@@ -33,6 +34,13 @@ class AuthRegisterView extends StatelessWidget {
         final DatabaseReference ref =
             FirebaseDatabase.instance.ref("Users/${firebaseUser.uid}");
         await ref.set(user.toJson());
+
+        final creditRef = FirebaseDatabase.instance.ref('Credits');
+
+        creditRef.push().set({
+          'UserID': firebaseUser.uid,
+          'Credit': 0.0,
+        });
 
         Navigator.of(context).pushReplacementNamed(OnboardingView.routeName);
       }

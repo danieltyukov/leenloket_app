@@ -1,7 +1,8 @@
 import 'package:Leenloket/src/views/admin/Categories/admin__categories__index.dart';
-import 'package:Leenloket/src/views/admin/admin__items__index.dart';
+import 'package:Leenloket/src/views/admin/items/admin__items__index.dart';
 import 'package:Leenloket/src/views/admin/lockers/admin__lockers__index.dart';
 import 'package:Leenloket/src/views/admin/reservations/admin__reservations__index.dart';
+import 'package:Leenloket/src/views/admin/users/admin__users__index.dart';
 import 'package:flutter/material.dart';
 import 'package:Leenloket/src/widgets/customButton.dart';
 
@@ -58,6 +59,14 @@ class _AdminHomeViewState extends State<AdminHomeView> {
               onPressed: () {
                 Navigator.restorablePushNamed(
                     context, AdminLockersIndex.routeName);
+              },
+            ),
+            CustomButton(
+              title: 'Users',
+              color: Colors.purple,
+              onPressed: () {
+                Navigator.restorablePushNamed(
+                    context, AdminUsersIndex.routeName);
               },
             ),
           ],
