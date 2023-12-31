@@ -41,6 +41,7 @@ class _AdminLocationsIndexState extends State<AdminLocationsIndex> {
               ),
               TextField(
                 controller: longitudeController,
+                keyboardType: TextInputType.number,
                 decoration: const InputDecoration(labelText: 'Longitude'),
               ),
             ],
