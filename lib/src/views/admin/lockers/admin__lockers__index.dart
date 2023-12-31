@@ -3,7 +3,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 
 class AdminLockersIndex extends StatefulWidget {
-  const AdminLockersIndex({Key? key}) : super(key: key);
+  const AdminLockersIndex({super.key});
 
   static const routeName = '/admin/lockers/index';
 

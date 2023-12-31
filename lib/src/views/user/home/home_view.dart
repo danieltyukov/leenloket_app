@@ -1,4 +1,5 @@
 import 'package:Leenloket/src/utils/rive_utils.dart';
+import 'package:Leenloket/src/views/user/favorites/user__favorites__index.dart';
 import 'package:Leenloket/src/views/user/home/components/animated_bar.dart';
 import 'package:Leenloket/src/views/user/home/components/side_menu.dart';
 import 'package:Leenloket/src/views/user/profile/user__profile.dart';
@@ -50,6 +51,7 @@ class _HomeViewState extends State<HomeView> {
     final List<Widget> pages = [
       HomePageView(),
       const SampleItemListView(),
+      const UserFavoriteItems(),
       const UserProfileView(),
     ];
 
@@ -221,6 +223,10 @@ List<RiveAsset> bottomNavs = [
       artboard: "SEARCH",
       stateMachineName: "SEARCH_Interactivity",
       title: "SEARCH"),
+  RiveAsset("assets/rive/navigationbar_icons.riv",
+      artboard: "LIKE/STAR",
+      stateMachineName: "STAR_Interactivity",
+      title: "STAR"),
   RiveAsset("assets/rive/navigationbar_icons.riv",
       artboard: "USER", stateMachineName: "USER_Interactivity", title: "ME"),
 ];

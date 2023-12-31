@@ -1,11 +1,13 @@
 import 'package:Leenloket/src/views/admin/Categories/admin__categories__index.dart';
 import 'package:Leenloket/src/views/admin/items/admin__items__index.dart';
 import 'package:Leenloket/src/views/admin/home/admin__home_view.dart';
+import 'package:Leenloket/src/views/admin/locations/admin__locations__index.dart';
 import 'package:Leenloket/src/views/admin/lockers/admin__lockers__index.dart';
 import 'package:Leenloket/src/views/admin/reservations/admin__reservations__index.dart';
 import 'package:Leenloket/src/views/admin/users/admin__users__index.dart';
 import 'package:Leenloket/src/views/authentication/auth__onboarding_view.dart';
 import 'package:Leenloket/src/views/user/credit/user__credit__view.dart';
+import 'package:Leenloket/src/views/user/favorites/user__favorites__index.dart';
 import 'package:Leenloket/src/views/user/reserving/reserving__item__confirmation_view.dart';
 import 'package:Leenloket/src/views/user/reserving/reserving__item__overview_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +24,7 @@ import 'package:Leenloket/src/views/user/shop/shop__item__single_view.dart';
 import 'package:Leenloket/src/views/user/shop/shop__index_view.dart';
 import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
 import 'package:Leenloket/src/views/user/settings/settings_view.dart';
+import 'package:Leenloket/src/views/user/locations/user__locations__map.dart';
 import 'package:Leenloket/src/models/user_model.dart' as userModel;
 
 /// The Widget that configures your application.
@@ -118,6 +121,9 @@ class _MyAppState extends State<MyApp> {
                   case AdminUsersIndex.routeName:
                     return const AdminUsersIndex();
 
+                  case AdminLocationsIndex.routeName:
+                    return const AdminLocationsIndex();
+
                   // Authentication routes
                   case OnboardingView.routeName:
                     return const OnboardingView();
@@ -134,6 +140,12 @@ class _MyAppState extends State<MyApp> {
                     return HomeView(
                       currentIndex: 0,
                     );
+
+                  case UserFavoriteItems.routeName:
+                    return const UserFavoriteItems();
+
+                  case UserLocationsMap.routeName:
+                    return const UserLocationsMap();
 
                   case UserReservationsIndex.routeName:
                     return const UserReservationsIndex();

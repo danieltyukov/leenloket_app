@@ -1,3 +1,4 @@
+import 'package:Leenloket/src/views/user/home/components/side_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -28,16 +29,18 @@ class _UserReservationsIndex extends State<UserReservationsIndex> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'My Reservations',
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+      drawer: SideMenu(),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            const SizedBox(height: 20),
-            const Text(
-              'My Reservations',
-              style: TextStyle(fontSize: 20),
-            ),
             const SizedBox(height: 20),
             const Text(
               'Click on a reservation to view more details',

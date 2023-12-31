@@ -1,6 +1,7 @@
 import 'package:Leenloket/src/utils/authentication_functions.dart';
 import 'package:Leenloket/src/views/admin/Categories/admin__categories__index.dart';
 import 'package:Leenloket/src/views/admin/items/admin__items__index.dart';
+import 'package:Leenloket/src/views/admin/locations/admin__locations__index.dart';
 import 'package:Leenloket/src/views/admin/lockers/admin__lockers__index.dart';
 import 'package:Leenloket/src/views/admin/reservations/admin__reservations__index.dart';
 import 'package:Leenloket/src/views/admin/users/admin__users__index.dart';
@@ -82,6 +83,14 @@ class _AdminHomeViewState extends State<AdminHomeView> {
               onPressed: () {
                 Navigator.restorablePushNamed(
                     context, AdminUsersIndex.routeName);
+              },
+            ),
+            CustomButton(
+              title: 'Locations',
+              color: Colors.yellow,
+              onPressed: () {
+                Navigator.restorablePushNamed(
+                    context, AdminLocationsIndex.routeName);
               },
             ),
           ],

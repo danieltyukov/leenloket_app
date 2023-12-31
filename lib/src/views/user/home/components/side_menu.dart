@@ -1,7 +1,10 @@
+import 'package:Leenloket/src/views/user/credit/user__credit__view.dart';
 import 'package:Leenloket/src/views/user/home/home_view.dart';
+import 'package:Leenloket/src/views/user/reservations/user__reservations__index.dart';
 import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
 import 'package:Leenloket/src/views/user/settings/settings_service.dart';
 import 'package:Leenloket/src/views/user/settings/settings_view.dart';
+import 'package:Leenloket/src/views/user/locations/user__locations__map.dart';
 import 'package:flutter/material.dart';
 
 class SideMenu extends StatefulWidget {
@@ -65,12 +68,42 @@ class _SideMenuState extends State<SideMenu> {
               color: Colors.white,
             ),
             title: const Text(
+              "My Profile",
+              style: TextStyle(color: Colors.white),
+            ),
+            onTap: () => {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomeView(
+                        currentIndex: 3,
+                      )))
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.calendar_month,
+              color: Colors.white,
+            ),
+            title: const Text(
               "My Reservations",
               style: TextStyle(color: Colors.white),
             ),
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => HomeView(currentIndex: 2)))
+                  builder: (context) => const UserReservationsIndex()))
+            },
+          ),
+          ListTile(
+            leading: const Icon(
+              Icons.location_on,
+              color: Colors.white,
+            ),
+            title: const Text(
+              "Locations",
+              style: TextStyle(color: Colors.white),
+            ),
+            onTap: () => {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const UserLocationsMap()))
             },
           ),
           ListTile(
