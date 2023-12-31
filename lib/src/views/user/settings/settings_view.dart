@@ -1,3 +1,4 @@
+import 'package:Leenloket/src/utils/authentication_functions.dart';
 import 'package:Leenloket/src/views/authentication/auth__onboarding_view.dart';
 import 'package:Leenloket/src/views/user/home/components/side_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,10 +17,6 @@ class SettingsView extends StatelessWidget {
   static const routeName = '/settings';
 
   final SettingsController controller;
-
-  Future<void> _logout() async {
-    FirebaseAuth.instance.signOut();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +58,7 @@ class SettingsView extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () async {
-                await _logout();
+                await firebaseLogout();
                 Navigator.of(context).pushNamedAndRemoveUntil(
                   OnboardingView.routeName,
                   (route) => false,

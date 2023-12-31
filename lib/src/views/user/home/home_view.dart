@@ -1,6 +1,7 @@
 import 'package:Leenloket/src/utils/rive_utils.dart';
 import 'package:Leenloket/src/views/user/home/components/animated_bar.dart';
 import 'package:Leenloket/src/views/user/home/components/side_menu.dart';
+import 'package:Leenloket/src/views/user/profile/user__profile.dart';
 import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
 import 'package:Leenloket/src/views/user/settings/settings_service.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -49,7 +50,7 @@ class _HomeViewState extends State<HomeView> {
     final List<Widget> pages = [
       HomePageView(),
       const SampleItemListView(),
-      const UserReservationsIndex(),
+      const UserProfileView(),
     ];
 
     return Scaffold(
