@@ -1,6 +1,7 @@
 import 'package:Leenloket/src/views/user/reservations/user__reservations__index.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 /// Displays detailed information about a SampleItem.
 class ReservationsSingle extends StatefulWidget {
@@ -114,6 +115,15 @@ class _ReservationsSingle extends State<ReservationsSingle> {
                 ]),
                 Row(children: [Text("Code: $_code")]),
                 Row(children: [Text("Item: $_itemName")]),
+                //create qr code
+                const SizedBox(
+                  height: 50,
+                ),
+                QrImageView(
+                  data: _code,
+                  version: QrVersions.auto,
+                  size: 200.0,
+                ),
                 const SizedBox(
                   height: 50,
                 ),

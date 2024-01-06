@@ -56,16 +56,6 @@ class SettingsView extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            ElevatedButton(
-              onPressed: () async {
-                await firebaseLogout();
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  OnboardingView.routeName,
-                  (route) => false,
-                );
-              },
-              child: const Text('Logout'),
-            ),
           ],
         ),
       ),

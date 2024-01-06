@@ -140,17 +140,6 @@ class HomePageView extends StatelessWidget {
             children: [
               const SizedBox(height: 20),
               Container(
-                  height: 150,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 229, 77, 77),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 25, bottom: 25),
-                    child: Image.asset('assets/images/logo.png'),
-                  )),
-              const SizedBox(height: 20),
-              Container(
                 color: Colors.transparent,
                 height: 250,
                 child: FirebaseAnimatedList(

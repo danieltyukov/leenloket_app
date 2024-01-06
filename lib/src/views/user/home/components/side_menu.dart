@@ -34,6 +34,16 @@ class _SideMenuState extends State<SideMenu> {
           const SizedBox(
             height: 50,
           ),
+          SizedBox(
+              height: 150,
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 25, bottom: 25),
+                child: Image.asset('assets/images/logo.png'),
+              )),
+          const SizedBox(
+            height: 20,
+          ),
           ListTile(
             leading: const Icon(
               Icons.home_filled,
@@ -64,6 +74,20 @@ class _SideMenuState extends State<SideMenu> {
           ),
           ListTile(
             leading: const Icon(
+              Icons.location_on,
+              color: Colors.white,
+            ),
+            title: const Text(
+              "Locations",
+              style: TextStyle(color: Colors.white),
+            ),
+            onTap: () => {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const UserLocationsMap()))
+            },
+          ),
+          ListTile(
+            leading: const Icon(
               Icons.person,
               color: Colors.white,
             ),
@@ -90,20 +114,6 @@ class _SideMenuState extends State<SideMenu> {
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const UserReservationsIndex()))
-            },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.location_on,
-              color: Colors.white,
-            ),
-            title: const Text(
-              "Locations",
-              style: TextStyle(color: Colors.white),
-            ),
-            onTap: () => {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const UserLocationsMap()))
             },
           ),
           ListTile(
