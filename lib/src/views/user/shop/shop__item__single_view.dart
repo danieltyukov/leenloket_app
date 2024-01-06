@@ -1,5 +1,8 @@
-import 'package:Leenloket/src/views/user/reserving/reserving__item__overview_view.dart';
+import 'package:Leenloket/src/models/item_model.dart';
+import 'package:Leenloket/src/models/user_model.dart' as UserModel;
+import 'package:Leenloket/src/views/user/reserving/reserving__item__step_0__credentials.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -54,6 +57,23 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
 
   @override
   Widget build(BuildContext context) {
+    late UserModel.User currentUser;
+
+    Future<UserModel.User> getUser() async {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      final ref = FirebaseDatabase.instance.ref("Users/$uid");
+      final snapshot = await ref.get();
+
+      if (snapshot.exists && snapshot.value is Map) {
+        final data = Map<String, dynamic>.from(snapshot.value as Map);
+        final user = UserModel.User.fromJson(data, uid);
+        currentUser = user;
+        return user;
+      } else {
+        throw Exception('User not found');
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Item Details'),
@@ -70,6 +90,18 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
           } else {
             DataSnapshot itemSnapshot = snapshot.data!.snapshot;
             String image = itemSnapshot.child('ImageUrl').value.toString();
+
+            Item currentItem = Item(
+              itemID: itemSnapshot.key!,
+              itemName: itemSnapshot.child('ItemName').value.toString(),
+              description: itemSnapshot.child('Description').value.toString(),
+              pricePerDay: itemSnapshot.child('PricePerDay').value.toString(),
+              status: itemSnapshot.child('Status').value.toString(),
+              categoryID: itemSnapshot.child('CategoryID').value.toString(),
+              lockerID: itemSnapshot.child('LockerID').value.toString(),
+              imageUrl: itemSnapshot.child('ImageUrl').value.toString(),
+            );
+
             // Display details for the specific item
             return SingleChildScrollView(
               child: SafeArea(
@@ -135,28 +167,39 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                                   color: Colors.black54,
                                   fontWeight: FontWeight.w400))),
                       const SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              foregroundColor: Colors.white,
-                              backgroundColor: Colors.red,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                              ),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) =>
-                                      ReservingItemOverviewView(
-                                          itemId: itemSnapshot.key!)));
-                            },
-                            child: const Text("Rent this item"),
-                          )
-                        ],
-                      )
+                      FutureBuilder(
+                          future: getUser(),
+                          builder: (context,
+                              AsyncSnapshot<UserModel.User> snapshot) {
+                            if (snapshot.hasData) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      foregroundColor: Colors.white,
+                                      backgroundColor: Colors.red,
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10)),
+                                      ),
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ReservingItemStep0(
+                                                      item: currentItem,
+                                                      user: currentUser)));
+                                    },
+                                    child: const Text("Rent this item"),
+                                  )
+                                ],
+                              );
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          }),
                     ],
                   ),
                 ),

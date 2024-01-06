@@ -1,6 +1,7 @@
 class Item {
+  final String itemID;
   final String itemName;
-  final int pricePerDay;
+  final String pricePerDay;
   final String description;
   final String status;
   final String categoryID;
@@ -8,6 +9,7 @@ class Item {
   final String imageUrl;
 
   Item({
+    required this.itemID,
     required this.itemName,
     required this.pricePerDay,
     required this.description,
@@ -17,8 +19,9 @@ class Item {
     required this.imageUrl,
   });
 
-  factory Item.fromJson(Map<String, dynamic> json) {
+  factory Item.fromJson(Map<String, dynamic> json, key) {
     return Item(
+      itemID: key,
       itemName: json['ItemName'],
       pricePerDay: json['PricePerDay'],
       description: json['Description'],

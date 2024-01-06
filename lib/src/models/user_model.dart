@@ -1,4 +1,6 @@
 import 'package:Leenloket/src/models/credit_transaction_model.dart';
+import 'package:Leenloket/src/models/reservation_model.dart';
+import 'package:Leenloket/src/utils/reservationCode_functions.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 class User {
@@ -158,6 +160,9 @@ class User {
     late DatabaseReference creditsRef =
         FirebaseDatabase.instance.ref('CreditHolders/$creditID');
 
+    //Create transaction in database
+    createCreditTransaction("Item Reservation", -amount);
+
     await creditsRef.update({
       'Credit': (credit - amount).toStringAsFixed(2),
     });
@@ -215,5 +220,36 @@ class User {
     }
 
     return creditTransactions;
+  }
+
+  ////////////////////////////////////////////
+  ////////////////////////////////////////////
+  ///        Reservation Mehtods           ///
+  ////////////////////////////////////////////
+  ////////////////////////////////////////////
+
+  // Create a reservation for the user
+  Future<void> createReservation(Reservation reservation) async {
+    late DatabaseReference reservationsRef =
+        FirebaseDatabase.instance.ref('Reservations');
+    late DatabaseReference dbRefCodes = FirebaseDatabase.instance.ref('Codes');
+
+    DatabaseReference newReservationRef = reservationsRef.push();
+
+    int reservationCode = createReservationCode();
+
+    await newReservationRef.set({
+      'UserID': reservation.userID,
+      'ItemID': reservation.itemID,
+      'StartDate': reservation.startDate,
+      'EndDate': reservation.endDate,
+      'Status': reservation.status,
+    }).then((reservation) => {
+          dbRefCodes.push().set({
+            "Code": "QRCODEHERE",
+            "PINCode": "$reservationCode",
+            "ReservationID": newReservationRef.key,
+          }),
+        });
   }
 }

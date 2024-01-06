@@ -1,11 +1,11 @@
-import 'package:Leenloket/src/views/user/reservations/user__reservations__single.dart';
+import 'package:Leenloket/src/models/reservation_model.dart';
 import 'package:flutter/material.dart';
 import 'package:Leenloket/src/views/user/home/home_view.dart';
 
 class ReservingItemConfirmation extends StatefulWidget {
-  final String reservationId;
+  final Reservation reservation;
 
-  const ReservingItemConfirmation({super.key, required this.reservationId});
+  const ReservingItemConfirmation({super.key, required this.reservation});
 
   static const routeName = '/reserving/confirmation';
 
@@ -46,9 +46,9 @@ class _ReservingItemConfirmationState extends State<ReservingItemConfirmation> {
                 ElevatedButton(
                   onPressed: () {
                     // Add your action for the first button here
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => ReservationsSingle(
-                            reservationId: widget.reservationId!)));
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (context) => ReservationsSingle(
+                    //         reservationId: widget.reservation)));
                   },
                   child: const Text('See reservation'),
                 ),
