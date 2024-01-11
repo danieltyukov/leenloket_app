@@ -1,3 +1,4 @@
+import 'package:Leenloket/src/models/locker_model.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +14,23 @@ class AdminLockersIndex extends StatefulWidget {
 
 class _AdminLockersIndexState extends State<AdminLockersIndex> {
   final ref = FirebaseDatabase.instance.ref('Lockers');
+  final locationRef = FirebaseDatabase.instance.ref('Locations');
 
   void _createNewLocker() async {
-    final TextEditingController locationController = TextEditingController();
+    String? selectedLocationID;
     final TextEditingController statusController = TextEditingController();
+
+    final locationSnapshot = await locationRef.get();
+
+    List<DropdownMenuItem<String>> locationItems =
+        locationSnapshot.children.map((e) {
+      return DropdownMenuItem<String>(
+        value: e.key,
+        child: Text(e.child('LocationName').value.toString()),
+      );
+    }).toList();
+
+    // ignore: use_build_context_synchronously
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -24,9 +38,12 @@ class _AdminLockersIndexState extends State<AdminLockersIndex> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
-              controller: locationController,
-              decoration: const InputDecoration(labelText: 'Location'),
+            DropdownButtonFormField(
+              decoration: const InputDecoration(labelText: 'Locker'),
+              items: locationItems,
+              onChanged: (String? value) {
+                selectedLocationID = value;
+              },
             ),
             TextField(
               controller: statusController,
@@ -41,10 +58,10 @@ class _AdminLockersIndexState extends State<AdminLockersIndex> {
           ),
           TextButton(
             onPressed: () {
-              if (locationController.text.isNotEmpty &&
+              if (selectedLocationID != null &&
                   statusController.text.isNotEmpty) {
                 ref.push().set({
-                  'Location': locationController.text,
+                  'Location': selectedLocationID,
                   'Status': statusController.text,
                 });
               }
@@ -78,22 +95,35 @@ class _AdminLockersIndexState extends State<AdminLockersIndex> {
           itemBuilder: (context, snapshot, animation, index) {
             final location = snapshot.child('Location').value.toString();
             final status = snapshot.child('Status').value.toString();
+
+            Locker currentLocker =
+                Locker(id: snapshot.key!, locationID: location, status: status);
+
             return GestureDetector(
               onTap: () {},
               child: Card(
-                child: ListTile(
-                  title: Text(location),
-                  subtitle: Text("ID: ${snapshot.key}"),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(status),
-                      IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _deleteLocker(snapshot.key!),
-                      ),
-                    ],
-                  ),
+                child: FutureBuilder(
+                  future: currentLocker.fetchLocation(),
+                  builder: (context, AsyncSnapshot<String> snapshot) {
+                    if (snapshot.hasData) {
+                      return ListTile(
+                        subtitle: Text("${snapshot.data}"),
+                        title: Text("ID: ${currentLocker.id}"),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(status),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => _deleteLocker(snapshot.data!),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  },
                 ),
               ),
             );
