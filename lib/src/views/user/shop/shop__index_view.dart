@@ -3,9 +3,12 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'shop__item__single_view.dart';
+import 'package:Leenloket/src/models/user_model.dart' as UserModel;
 
 class SampleItemListView extends StatefulWidget {
-  const SampleItemListView({super.key});
+  const SampleItemListView({super.key, required this.currentUser});
+
+  final UserModel.User currentUser;
 
   static const routeName = '/item-list';
 
@@ -64,6 +67,7 @@ class _SampleItemListViewState extends State<SampleItemListView> {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ShopItemSingleView(
+                              currentUser: widget.currentUser,
                               selectedStartDate: DateTime.now(),
                               selectedEndDate: DateTime.now(),
                               itemId: snapshot.key!)));

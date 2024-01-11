@@ -15,9 +15,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class UserProfileView extends StatefulWidget {
-  const UserProfileView({super.key});
+  const UserProfileView({super.key, required this.currentUser});
 
   static const routeName = '/user/profile';
+
+  final UserModel.User currentUser;
 
   @override
   State<UserProfileView> createState() => _UserProfileViewState();
@@ -130,7 +132,9 @@ class _UserProfileViewState extends State<UserProfileView> {
                 icon: Icons.calendar_today,
                 press: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const UserReservationsIndex()));
+                      builder: (context) => UserReservationsIndex(
+                            currentUser: widget.currentUser,
+                          )));
                 },
                 endIcon: true,
                 buttonColor: Colors.red,
@@ -156,6 +160,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                 press: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => SettingsView(
+                            currentUser: currentUser,
                             controller: _settingsController,
                           )));
                 },

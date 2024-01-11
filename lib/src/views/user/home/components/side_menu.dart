@@ -5,9 +5,15 @@ import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
 import 'package:Leenloket/src/views/user/settings/settings_service.dart';
 import 'package:Leenloket/src/views/user/settings/settings_view.dart';
 import 'package:Leenloket/src/views/user/locations/user__locations__map.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:Leenloket/src/models/user_model.dart' as UserModel;
 
 class SideMenu extends StatefulWidget {
+  final UserModel.User currentUser;
+
+  const SideMenu({super.key, required this.currentUser});
+
   @override
   State<SideMenu> createState() => _SideMenuState();
 }
@@ -56,6 +62,7 @@ class _SideMenuState extends State<SideMenu> {
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => HomeView(
+                      currentUser: widget.currentUser,
                       startDate: DateTime.now(),
                       endDate: DateTime.now().add(const Duration(days: 1)),
                       currentIndex: 0)))
@@ -73,6 +80,7 @@ class _SideMenuState extends State<SideMenu> {
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => HomeView(
+                      currentUser: widget.currentUser,
                       startDate: DateTime.now(),
                       endDate: DateTime.now().add(const Duration(days: 1)),
                       currentIndex: 1)))
@@ -104,6 +112,7 @@ class _SideMenuState extends State<SideMenu> {
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => HomeView(
+                        currentUser: widget.currentUser,
                         startDate: DateTime.now(),
                         endDate: DateTime.now().add(const Duration(days: 1)),
                         currentIndex: 3,
@@ -121,7 +130,9 @@ class _SideMenuState extends State<SideMenu> {
             ),
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const UserReservationsIndex()))
+                  builder: (context) => UserReservationsIndex(
+                        currentUser: widget.currentUser,
+                      )))
             },
           ),
           ListTile(
@@ -135,8 +146,9 @@ class _SideMenuState extends State<SideMenu> {
             ),
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) =>
-                    SettingsView(controller: _settingsController),
+                builder: (context) => SettingsView(
+                    currentUser: widget.currentUser,
+                    controller: _settingsController),
               ))
             },
           )

@@ -46,37 +46,28 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var auth = FirebaseAuth.instance;
-  var isLogedIn = false;
+  var isLoggedIn = false;
+  late userModel.User currentUser;
   String userRole = "r2";
 
-  checkIfLogin() async {
-    auth.authStateChanges().listen((User? user) {
-      if (user != null && mounted) {
-        final uid = user.uid;
-        getUser(uid);
-        setState(() {
-          isLogedIn = true;
-        });
-      }
-    });
-  }
-
-  getUser(uid) async {
+  Future<userModel.User> getUser() async {
+    final uid = FirebaseAuth.instance.currentUser!.uid;
     final ref = FirebaseDatabase.instance.ref("Users/$uid");
     final snapshot = await ref.get();
 
     if (snapshot.exists && snapshot.value is Map) {
       final data = Map<String, dynamic>.from(snapshot.value as Map);
       final user = userModel.User.fromJson(data, uid);
-      setState(() {
-        userRole = user.roleID;
-      });
+      currentUser = user;
+      isLoggedIn = true;
+      return user;
+    } else {
+      throw Exception('User not found');
     }
   }
 
   @override
   void initState() {
-    checkIfLogin();
     super.initState();
   }
 
@@ -85,286 +76,326 @@ class _MyAppState extends State<MyApp> {
     return ListenableBuilder(
       listenable: widget.settingsController,
       builder: (BuildContext context, Widget? child) {
-        return MaterialApp(
-          restorationScopeId: 'app',
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            Locale('en', ''),
-          ],
-          onGenerateTitle: (BuildContext context) =>
-              AppLocalizations.of(context)!.appTitle,
-          theme: ThemeData(
-            primaryColor: Colors.blue,
-          ),
-          darkTheme: ThemeData.dark(),
-          themeMode: widget.settingsController.themeMode,
-          onGenerateRoute: (RouteSettings routeSettings) {
-            return MaterialPageRoute<void>(
-              settings: routeSettings,
-              builder: (BuildContext context) {
-                switch (routeSettings.name) {
-                  //Admin routes
-                  case AdminHomeView.routeName:
-                    return const AdminHomeView();
-                  case AdminIndexItems.routeName:
-                    return const AdminIndexItems();
-                  case AdminReservationsIndex.routeName:
-                    return const AdminReservationsIndex();
+        //Get current user
+        return FutureBuilder<userModel.User>(
+            future: getUser(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasData) {
+                currentUser = snapshot.data;
+              }
 
-                  case AdimCategoriesIndex.routeName:
-                    return const AdimCategoriesIndex();
+              return MaterialApp(
+                restorationScopeId: 'app',
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: const [
+                  Locale('en', ''),
+                ],
+                onGenerateTitle: (BuildContext context) =>
+                    AppLocalizations.of(context)!.appTitle,
+                theme: ThemeData(
+                  primaryColor: Colors.red,
+                ),
+                darkTheme: ThemeData.dark(),
+                themeMode: widget.settingsController.themeMode,
+                onGenerateRoute: (RouteSettings routeSettings) {
+                  return MaterialPageRoute<void>(
+                    settings: routeSettings,
+                    builder: (BuildContext context) {
+                      switch (routeSettings.name) {
+                        //Admin routes
+                        case AdminHomeView.routeName:
+                          return const AdminHomeView();
+                        case AdminIndexItems.routeName:
+                          return const AdminIndexItems();
+                        case AdminReservationsIndex.routeName:
+                          return const AdminReservationsIndex();
 
-                  case AdminLockersIndex.routeName:
-                    return const AdminLockersIndex();
+                        case AdimCategoriesIndex.routeName:
+                          return const AdimCategoriesIndex();
 
-                  case AdminUsersIndex.routeName:
-                    return const AdminUsersIndex();
+                        case AdminLockersIndex.routeName:
+                          return const AdminLockersIndex();
 
-                  case AdminLocationsIndex.routeName:
-                    return const AdminLocationsIndex();
+                        case AdminUsersIndex.routeName:
+                          return const AdminUsersIndex();
 
-                  // Authentication routes
-                  case OnboardingView.routeName:
-                    return const OnboardingView();
+                        case AdminLocationsIndex.routeName:
+                          return const AdminLocationsIndex();
 
-                  case AuthRegisterView.routeName:
-                    return const AuthRegisterView();
+                        // Authentication routes
+                        case OnboardingView.routeName:
+                          return const OnboardingView();
 
-                  // Settings routes
-                  case SettingsView.routeName:
-                    return SettingsView(controller: widget.settingsController);
+                        case AuthRegisterView.routeName:
+                          return const AuthRegisterView();
 
-                  // Home routes
-                  case HomeView.routeName:
-                    return HomeView(
-                      startDate: DateTime.now(),
-                      endDate: DateTime.now().add(const Duration(days: 1)),
-                      currentIndex: 0,
-                    );
+                        // Settings routes
+                        case SettingsView.routeName:
+                          final Map<String, dynamic>? args =
+                              routeSettings.arguments as Map<String, dynamic>?;
+                          if (args != null && args.containsKey('user')) {
+                            return SettingsView(
+                                currentUser: args['user'] as userModel.User,
+                                controller: widget.settingsController);
+                          } else {
+                            // Handle missing or invalid arguments
+                            return const SizedBox.shrink();
+                          }
 
-                  case UserFavoriteItems.routeName:
-                    return const UserFavoriteItems();
+                        // Home routes
+                        case HomeView.routeName:
+                          return HomeView(
+                            currentUser: currentUser,
+                            startDate: DateTime.now(),
+                            endDate:
+                                DateTime.now().add(const Duration(days: 1)),
+                            currentIndex: 0,
+                          );
 
-                  case UserLocationsMap.routeName:
-                    return const UserLocationsMap();
+                        case UserFavoriteItems.routeName:
+                          return const UserFavoriteItems();
 
-                  case UserReservationsIndex.routeName:
-                    return const UserReservationsIndex();
+                        case UserLocationsMap.routeName:
+                          return const UserLocationsMap();
 
-                  case ReservingItemStep0.routeName:
-                    // Extract itemId from route arguments
-                    final Map<String, dynamic>? args =
-                        routeSettings.arguments as Map<String, dynamic>?;
+                        case UserReservationsIndex.routeName:
+                          final Map<String, dynamic>? args =
+                              routeSettings.arguments as Map<String, dynamic>?;
 
-                    if (args != null &&
-                        args.containsKey('item') &&
-                        args.containsKey('user')) {
-                      final Item item = args['item'] as Item;
-                      final userModel.User user =
-                          args['user'] as userModel.User;
-                      return ReservingItemStep0(
-                        user: user,
-                        item: item,
-                      );
-                    } else {
-                      // Handle missing or invalid arguments
-                      return const SizedBox.shrink();
-                    }
+                          if (args != null && args.containsKey('user')) {
+                            final userModel.User user =
+                                args['user'] as userModel.User;
+                            return UserReservationsIndex(currentUser: user);
+                          } else {
+                            // Handle missing or invalid arguments
+                            return const SizedBox.shrink();
+                          }
 
-                  case ReservingItemStep1.routeName:
-                    // Extract itemId from route arguments
-                    final Map<String, dynamic>? args =
-                        routeSettings.arguments as Map<String, dynamic>?;
+                        case ReservingItemStep0.routeName:
+                          // Extract itemId from route arguments
+                          final Map<String, dynamic>? args =
+                              routeSettings.arguments as Map<String, dynamic>?;
 
-                    if (args != null &&
-                        args.containsKey('item') &&
-                        args.containsKey('user')) {
-                      final Item item = args['item'] as Item;
-                      final userModel.User user =
-                          args['user'] as userModel.User;
-                      return ReservingItemStep1(
-                        user: user,
-                        item: item,
-                      );
-                    } else {
-                      // Handle missing or invalid arguments
-                      return const SizedBox.shrink();
-                    }
+                          if (args != null &&
+                              args.containsKey('item') &&
+                              args.containsKey('user')) {
+                            final Item item = args['item'] as Item;
+                            final userModel.User user =
+                                args['user'] as userModel.User;
+                            return ReservingItemStep0(
+                              user: user,
+                              item: item,
+                            );
+                          } else {
+                            // Handle missing or invalid arguments
+                            return const SizedBox.shrink();
+                          }
 
-                  case ReservingItemStep1b.routeName:
-                    // Extract itemId from route arguments
-                    final Map<String, dynamic>? args =
-                        routeSettings.arguments as Map<String, dynamic>?;
+                        case ReservingItemStep1.routeName:
+                          // Extract itemId from route arguments
+                          final Map<String, dynamic>? args =
+                              routeSettings.arguments as Map<String, dynamic>?;
 
-                    if (args != null &&
-                        args.containsKey('item') &&
-                        args.containsKey('user') &&
-                        args.containsKey('startDate')) {
-                      final Item item = args['item'] as Item;
-                      final userModel.User user =
-                          args['user'] as userModel.User;
-                      final DateTime startDate = args['startDate'] as DateTime;
-                      return ReservingItemStep1b(
-                        user: user,
-                        item: item,
-                        startDate: startDate,
-                      );
-                    } else {
-                      // Handle missing or invalid arguments
-                      return const SizedBox.shrink();
-                    }
+                          if (args != null &&
+                              args.containsKey('item') &&
+                              args.containsKey('user')) {
+                            final Item item = args['item'] as Item;
+                            final userModel.User user =
+                                args['user'] as userModel.User;
+                            return ReservingItemStep1(
+                              user: user,
+                              item: item,
+                            );
+                          } else {
+                            // Handle missing or invalid arguments
+                            return const SizedBox.shrink();
+                          }
 
-                  case ReservingItemStep1c.routeName:
-                    // Extract itemId from route arguments
-                    final Map<String, dynamic>? args =
-                        routeSettings.arguments as Map<String, dynamic>?;
+                        case ReservingItemStep1b.routeName:
+                          // Extract itemId from route arguments
+                          final Map<String, dynamic>? args =
+                              routeSettings.arguments as Map<String, dynamic>?;
 
-                    if (args != null &&
-                        args.containsKey('item') &&
-                        args.containsKey('user') &&
-                        args.containsKey('startDateTime')) {
-                      final Item item = args['item'] as Item;
-                      final userModel.User user =
-                          args['user'] as userModel.User;
-                      final DateTime startDateTime =
-                          args['startDateTime'] as DateTime;
-                      return ReservingItemStep1c(
-                        user: user,
-                        item: item,
-                        startDateTime: startDateTime,
-                      );
-                    } else {
-                      // Handle missing or invalid arguments
-                      return const SizedBox.shrink();
-                    }
+                          if (args != null &&
+                              args.containsKey('item') &&
+                              args.containsKey('user') &&
+                              args.containsKey('startDate')) {
+                            final Item item = args['item'] as Item;
+                            final userModel.User user =
+                                args['user'] as userModel.User;
+                            final DateTime startDate =
+                                args['startDate'] as DateTime;
+                            return ReservingItemStep1b(
+                              user: user,
+                              item: item,
+                              startDate: startDate,
+                            );
+                          } else {
+                            // Handle missing or invalid arguments
+                            return const SizedBox.shrink();
+                          }
 
-                  case ReservingItemStep1d.routeName:
-                    // Extract itemId from route arguments
-                    final Map<String, dynamic>? args =
-                        routeSettings.arguments as Map<String, dynamic>?;
+                        case ReservingItemStep1c.routeName:
+                          // Extract itemId from route arguments
+                          final Map<String, dynamic>? args =
+                              routeSettings.arguments as Map<String, dynamic>?;
 
-                    if (args != null &&
-                        args.containsKey('item') &&
-                        args.containsKey('user') &&
-                        args.containsKey('startDateTime') &&
-                        args.containsKey('endDate')) {
-                      final Item item = args['item'] as Item;
-                      final userModel.User user =
-                          args['user'] as userModel.User;
-                      final DateTime startDateTime =
-                          args['startDateTime'] as DateTime;
-                      final DateTime endDate = args['endDate'] as DateTime;
-                      return ReservingItemStep1d(
-                        user: user,
-                        item: item,
-                        startDateTime: startDateTime,
-                        endDate: endDate,
-                      );
-                    } else {
-                      // Handle missing or invalid arguments
-                      return const SizedBox.shrink();
-                    }
+                          if (args != null &&
+                              args.containsKey('item') &&
+                              args.containsKey('user') &&
+                              args.containsKey('startDateTime')) {
+                            final Item item = args['item'] as Item;
+                            final userModel.User user =
+                                args['user'] as userModel.User;
+                            final DateTime startDateTime =
+                                args['startDateTime'] as DateTime;
+                            return ReservingItemStep1c(
+                              user: user,
+                              item: item,
+                              startDateTime: startDateTime,
+                            );
+                          } else {
+                            // Handle missing or invalid arguments
+                            return const SizedBox.shrink();
+                          }
 
-                  case ReservingItemStep2.routeName:
-                    // Extract itemId from route arguments
-                    final Map<String, dynamic>? args =
-                        routeSettings.arguments as Map<String, dynamic>?;
+                        case ReservingItemStep1d.routeName:
+                          // Extract itemId from route arguments
+                          final Map<String, dynamic>? args =
+                              routeSettings.arguments as Map<String, dynamic>?;
 
-                    if (args != null &&
-                        args.containsKey('item') &&
-                        args.containsKey('user') &&
-                        args.containsKey('start') &&
-                        args.containsKey('end')) {
-                      final Item item = args['item'] as Item;
-                      final userModel.User user =
-                          args['user'] as userModel.User;
-                      final DateTime start = args['start'] as DateTime;
-                      final DateTime end = args['end'] as DateTime;
-                      return ReservingItemStep2(
-                        user: user,
-                        item: item,
-                        startDateTime: start,
-                        endDateTime: end,
-                      );
-                    } else {
-                      // Handle missing or invalid arguments
-                      return const SizedBox.shrink();
-                    }
+                          if (args != null &&
+                              args.containsKey('item') &&
+                              args.containsKey('user') &&
+                              args.containsKey('startDateTime') &&
+                              args.containsKey('endDate')) {
+                            final Item item = args['item'] as Item;
+                            final userModel.User user =
+                                args['user'] as userModel.User;
+                            final DateTime startDateTime =
+                                args['startDateTime'] as DateTime;
+                            final DateTime endDate =
+                                args['endDate'] as DateTime;
+                            return ReservingItemStep1d(
+                              user: user,
+                              item: item,
+                              startDateTime: startDateTime,
+                              endDate: endDate,
+                            );
+                          } else {
+                            // Handle missing or invalid arguments
+                            return const SizedBox.shrink();
+                          }
 
-                  case ReservationsSingle.routeName:
-                    // Extract itemId from route arguments
-                    final Map<String, dynamic>? args =
-                        routeSettings.arguments as Map<String, dynamic>?;
+                        case ReservingItemStep2.routeName:
+                          // Extract itemId from route arguments
+                          final Map<String, dynamic>? args =
+                              routeSettings.arguments as Map<String, dynamic>?;
 
-                    if (args != null && args.containsKey('reservationId')) {
-                      final String reservationId =
-                          args['reservationId'] as String;
-                      return ReservationsSingle(reservationId: reservationId);
-                    } else {
-                      // Handle missing or invalid arguments
-                      return const SizedBox.shrink();
-                    }
+                          if (args != null &&
+                              args.containsKey('item') &&
+                              args.containsKey('user') &&
+                              args.containsKey('start') &&
+                              args.containsKey('end')) {
+                            final Item item = args['item'] as Item;
+                            final userModel.User user =
+                                args['user'] as userModel.User;
+                            final DateTime start = args['start'] as DateTime;
+                            final DateTime end = args['end'] as DateTime;
+                            return ReservingItemStep2(
+                              user: user,
+                              item: item,
+                              startDateTime: start,
+                              endDateTime: end,
+                            );
+                          } else {
+                            // Handle missing or invalid arguments
+                            return const SizedBox.shrink();
+                          }
 
-                  case UserCreditView.routeName:
-                    // Extract user model from router args
-                    final Map<String, dynamic>? args =
-                        routeSettings.arguments as Map<String, dynamic>?;
-                    if (args != null && args.containsKey('user')) {
-                      final userModel.User user =
-                          args['user'] as userModel.User;
-                      return UserCreditView(currentUser: user);
-                    } else {
-                      // Handle missing or invalid arguments
-                      return const SizedBox.shrink();
-                    }
+                        case ReservationsSingle.routeName:
+                          // Extract itemId from route arguments
+                          final Map<String, dynamic>? args =
+                              routeSettings.arguments as Map<String, dynamic>?;
 
-                  // Shop routes
-                  case SampleItemListView.routeName:
-                  case ShopItemSingleView.routeName:
-                    // Extract itemId from route arguments
-                    final Map<String, dynamic>? args =
-                        routeSettings.arguments as Map<String, dynamic>?;
+                          if (args != null &&
+                              args.containsKey('reservationId')) {
+                            final String reservationId =
+                                args['reservationId'] as String;
+                            return ReservationsSingle(
+                                reservationId: reservationId);
+                          } else {
+                            // Handle missing or invalid arguments
+                            return const SizedBox.shrink();
+                          }
 
-                    if (args != null && args.containsKey('itemId')) {
-                      final String itemId = args['itemId'] as String;
-                      final DateTime selectedStartDate =
-                          args['selectedStartDate'] as DateTime;
-                      final DateTime selectedEndDate = args['selectedEndDate']
-                          as DateTime; // Initialize selectedDay with the first day.
-                      return ShopItemSingleView(
-                          selectedEndDate: selectedEndDate,
-                          selectedStartDate: selectedStartDate,
-                          itemId: itemId);
-                    } else {
-                      // Handle missing or invalid arguments
-                      return const SizedBox.shrink();
-                    }
+                        case UserCreditView.routeName:
+                          // Extract user model from router args
+                          final Map<String, dynamic>? args =
+                              routeSettings.arguments as Map<String, dynamic>?;
+                          if (args != null && args.containsKey('user')) {
+                            final userModel.User user =
+                                args['user'] as userModel.User;
+                            return UserCreditView(currentUser: user);
+                          } else {
+                            // Handle missing or invalid arguments
+                            return const SizedBox.shrink();
+                          }
 
-                  // Default route
-                  default:
-                    if (isLogedIn) {
-                      if (userRole == "r1") {
-                        return const AdminHomeView();
-                      } else {
-                        return HomeView(
-                          startDate: DateTime.now(),
-                          endDate: DateTime.now().add(const Duration(days: 1)),
-                          currentIndex: 0,
-                        );
+                        // Shop routes
+                        case SampleItemListView.routeName:
+                        case ShopItemSingleView.routeName:
+                          // Extract itemId from route arguments
+                          final Map<String, dynamic>? args =
+                              routeSettings.arguments as Map<String, dynamic>?;
+
+                          if (args != null && args.containsKey('itemId')) {
+                            final String itemId = args['itemId'] as String;
+                            final DateTime selectedStartDate =
+                                args['selectedStartDate'] as DateTime;
+                            final DateTime selectedEndDate = args[
+                                    'selectedEndDate']
+                                as DateTime; // Initialize selectedDay with the first day.
+                            final currentUser =
+                                args['currentUser'] as userModel.User;
+                            return ShopItemSingleView(
+                                currentUser: currentUser,
+                                selectedEndDate: selectedEndDate,
+                                selectedStartDate: selectedStartDate,
+                                itemId: itemId);
+                          } else {
+                            // Handle missing or invalid arguments
+                            return const SizedBox.shrink();
+                          }
+
+                        // Default route
+                        default:
+                          if (isLoggedIn) {
+                            if (currentUser.roleID == "r1") {
+                              return const AdminHomeView();
+                            } else {
+                              return HomeView(
+                                currentUser: currentUser,
+                                startDate: DateTime.now(),
+                                endDate:
+                                    DateTime.now().add(const Duration(days: 1)),
+                                currentIndex: 0,
+                              );
+                            }
+                          } else {
+                            return const OnboardingView();
+                          }
                       }
-                    } else {
-                      return const OnboardingView();
-                    }
-                }
-              },
-            );
-          },
-        );
+                    },
+                  );
+                },
+              );
+            });
       },
     );
   }

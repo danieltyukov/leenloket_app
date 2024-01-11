@@ -26,7 +26,9 @@ class _UserCreditView extends State<UserCreditView> {
       appBar: AppBar(
         title: const Text('Credit'),
       ),
-      drawer: SideMenu(),
+      drawer: SideMenu(
+        currentUser: widget.currentUser,
+      ),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(20),

@@ -4,6 +4,7 @@ import 'package:Leenloket/src/views/user/home/components/side_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:Leenloket/src/models/user_model.dart' as UserModel;
 
 import 'settings_controller.dart';
 
@@ -12,9 +13,12 @@ import 'settings_controller.dart';
 /// When a user changes a setting, the SettingsController is updated and
 /// Widgets that listen to the SettingsController are rebuilt.
 class SettingsView extends StatelessWidget {
-  const SettingsView({super.key, required this.controller});
+  const SettingsView(
+      {super.key, required this.controller, required this.currentUser});
 
   static const routeName = '/settings';
+
+  final UserModel.User currentUser;
 
   final SettingsController controller;
 
@@ -24,7 +28,9 @@ class SettingsView extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Settings'),
       ),
-      drawer: SideMenu(),
+      drawer: SideMenu(
+        currentUser: currentUser,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(32),
         child: Column(

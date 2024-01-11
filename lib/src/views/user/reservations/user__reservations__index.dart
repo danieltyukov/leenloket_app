@@ -4,9 +4,12 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:Leenloket/src/views/user/reservations/user__reservations__single.dart';
+import 'package:Leenloket/src/models/user_model.dart' as UserModel;
 
 class UserReservationsIndex extends StatefulWidget {
-  const UserReservationsIndex({Key? key}) : super(key: key);
+  const UserReservationsIndex({super.key, required this.currentUser});
+
+  final UserModel.User currentUser;
 
   static const routeName = '/user/reservations/index';
 
@@ -15,14 +18,11 @@ class UserReservationsIndex extends StatefulWidget {
 }
 
 class _UserReservationsIndex extends State<UserReservationsIndex> {
-  late String loggedInUserID;
   late DatabaseReference reservationsRef;
-  final _itemsRef = FirebaseDatabase.instance;
 
   @override
   void initState() {
     super.initState();
-    loggedInUserID = FirebaseAuth.instance.currentUser!.uid;
     reservationsRef = FirebaseDatabase.instance.ref().child('Reservations');
   }
 
@@ -35,7 +35,9 @@ class _UserReservationsIndex extends State<UserReservationsIndex> {
           style: TextStyle(fontSize: 20),
         ),
       ),
-      drawer: SideMenu(),
+      drawer: SideMenu(
+        currentUser: widget.currentUser,
+      ),
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -76,7 +78,8 @@ class _UserReservationsIndex extends State<UserReservationsIndex> {
 
   Widget buildList(String status) {
     return FirebaseAnimatedList(
-      query: reservationsRef.orderByChild('UserID').equalTo(loggedInUserID),
+      query:
+          reservationsRef.orderByChild('UserID').equalTo(widget.currentUser.id),
       itemBuilder: (context, snapshot, animation, index) {
         if (snapshot.value != null) {
           return FutureBuilder<String>(

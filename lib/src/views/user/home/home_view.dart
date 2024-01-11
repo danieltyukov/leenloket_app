@@ -1,3 +1,4 @@
+import 'package:Leenloket/src/utils/authentication_functions.dart';
 import 'package:Leenloket/src/utils/rive_utils.dart';
 import 'package:Leenloket/src/views/user/favorites/user__favorites__index.dart';
 import 'package:Leenloket/src/views/user/home/components/animated_bar.dart';
@@ -6,13 +7,11 @@ import 'package:Leenloket/src/views/user/home/home__tab__view.dart';
 import 'package:Leenloket/src/views/user/profile/user__profile.dart';
 import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
 import 'package:Leenloket/src/views/user/settings/settings_service.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:flutter/material.dart';
-import 'package:Leenloket/src/views/user/reservations/user__reservations__index.dart';
 import 'package:Leenloket/src/views/user/shop/shop__index_view.dart';
-import 'package:Leenloket/src/views/user/shop/shop__item__single_view.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:Leenloket/src/models/user_model.dart' as UserModel;
 
 import 'package:rive/rive.dart';
 import '../settings/settings_view.dart';
@@ -23,11 +22,14 @@ class HomeView extends StatefulWidget {
     required this.currentIndex,
     required this.endDate,
     required this.startDate,
+    required this.currentUser,
     super.key,
   });
 
   int currentIndex = 0;
   static const routeName = '/home';
+
+  final UserModel.User currentUser;
 
   final DateTime startDate;
   final DateTime endDate;
@@ -59,23 +61,38 @@ class _HomeViewState extends State<HomeView> {
       HomePageView(
         initialStartDate: widget.startDate,
         initialEndDate: widget.endDate,
+        currentUser: widget.currentUser,
       ),
-      const SampleItemListView(),
+      SampleItemListView(
+        currentUser: widget.currentUser,
+      ),
       const UserFavoriteItems(),
-      const UserProfileView(),
+      UserProfileView(
+        currentUser: widget.currentUser,
+      ),
     ];
 
     return Scaffold(
-        drawer: SideMenu(),
-        appBar: AppBar(),
+        drawer: SideMenu(
+          currentUser: widget.currentUser,
+        ),
+        appBar: AppBar(
+          title: Text(
+            'Hello, ${widget.currentUser.name}',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
         body: pages[widget.currentIndex],
         bottomNavigationBar: SafeArea(
           child: Container(
             padding: const EdgeInsets.all(12),
             margin: const EdgeInsets.symmetric(horizontal: 24),
-            decoration: const BoxDecoration(
-              color: Colors.red,
-              borderRadius: BorderRadius.all(Radius.circular(24)),
+            decoration: BoxDecoration(
+              color: Colors.red.shade600,
+              borderRadius: const BorderRadius.all(Radius.circular(24)),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

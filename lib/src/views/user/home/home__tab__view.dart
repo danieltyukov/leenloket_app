@@ -4,13 +4,17 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:Leenloket/src/utils/datetime_utils.dart';
+import 'package:Leenloket/src/models/user_model.dart' as UserModel;
 
 class HomePageView extends StatefulWidget {
   HomePageView({
     super.key,
+    required this.currentUser,
     required this.initialStartDate,
     required this.initialEndDate,
   });
+
+  final UserModel.User currentUser;
 
   final DateTime initialStartDate;
   final DateTime initialEndDate;
@@ -175,6 +179,7 @@ class _HomePageViewState extends State<HomePageView> {
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ShopItemSingleView(
+                                  currentUser: widget.currentUser,
                                   selectedEndDate: endDate,
                                   selectedStartDate: startDate,
                                   itemId: snapshot.key!)));

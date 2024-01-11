@@ -1,3 +1,4 @@
+import 'package:Leenloket/src/models/location_model.dart';
 import 'package:Leenloket/src/utils/datetime_utils.dart';
 import 'package:firebase_database/firebase_database.dart';
 
@@ -77,5 +78,65 @@ class Item {
     }
 
     return isAvailable;
+  }
+
+  //Get the location name of the locker where the item is stored
+  Future<String> getLocationName() async {
+    String locationID = '';
+    late DatabaseReference lockerRef =
+        FirebaseDatabase.instance.ref('Lockers/$lockerID');
+
+    DataSnapshot snapshot = await lockerRef.get();
+
+    if (snapshot.exists) {
+      Map<dynamic, dynamic> values = snapshot.value as Map;
+      locationID = values['Location'];
+    }
+
+    late DatabaseReference locationRef =
+        FirebaseDatabase.instance.ref('Locations/$locationID');
+
+    DataSnapshot locationSnapshot = await locationRef.get();
+
+    String locationName = '';
+
+    if (locationSnapshot.exists) {
+      Map<dynamic, dynamic> values = locationSnapshot.value as Map;
+      locationName = values['LocationName'];
+    }
+
+    return locationName;
+  }
+
+  //Get location in Location model
+  Future<Locations> getLocation() async {
+    String locationID = '';
+    late DatabaseReference lockerRef =
+        FirebaseDatabase.instance.ref('Lockers/$lockerID');
+
+    DataSnapshot snapshot = await lockerRef.get();
+
+    if (snapshot.exists) {
+      Map<dynamic, dynamic> values = snapshot.value as Map;
+      locationID = values['Location'];
+    }
+
+    late DatabaseReference locationRef =
+        FirebaseDatabase.instance.ref('Locations/$locationID');
+
+    DataSnapshot locationSnapshot = await locationRef.get();
+
+    late Locations location;
+
+    if (locationSnapshot.exists) {
+      Map<dynamic, dynamic> values = locationSnapshot.value as Map;
+      location = Locations(
+          id: locationSnapshot.key!,
+          lat: values['lat'],
+          long: values['long'],
+          locationName: values['LocationName']);
+    }
+
+    return location;
   }
 }
