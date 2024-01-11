@@ -29,6 +29,44 @@ DateTime parseFormattedDay(String formattedDay) {
   return DateTime(year, month, day);
 }
 
+//Parse formatted day and time from a single input of the format '01-01-2022 06:00'
+DateTime parseFormattedDayAndTime(String formattedDayAndTime) {
+  List<String> parts = formattedDayAndTime.split(' ');
+  String formattedDay = parts[0];
+  String formattedTime = parts[1];
+
+  List<String> dayParts = formattedDay.split('-');
+  int day = int.parse(dayParts[0]);
+  int month = int.parse(dayParts[1]);
+  int year = int.parse(dayParts[2]);
+
+  List<String> timeParts = formattedTime.split(':');
+  int hour = int.parse(timeParts[0]);
+  int minute = int.parse(timeParts[1]);
+
+  return DateTime(year, month, day, hour, minute);
+}
+
+//Return month name based on int input
+String getMonthNameShort(int month) {
+  final Map<int, String> monthMap = {
+    1: 'Jan',
+    2: 'Feb',
+    3: 'March',
+    4: 'Apr',
+    5: 'May',
+    6: 'June',
+    7: 'July',
+    8: 'Aug',
+    9: 'Sept',
+    10: 'Okt',
+    11: 'Nov',
+    12: 'Dec',
+  };
+
+  return monthMap[month]!;
+}
+
 DateTime combineDateAndTime(DateTime date, String time) {
   // Parse time string to TimeOfDay
   List<String> timeParts = time.split(':');

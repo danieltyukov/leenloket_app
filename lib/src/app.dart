@@ -142,6 +142,8 @@ class _MyAppState extends State<MyApp> {
                   // Home routes
                   case HomeView.routeName:
                     return HomeView(
+                      startDate: DateTime.now(),
+                      endDate: DateTime.now().add(const Duration(days: 1)),
                       currentIndex: 0,
                     );
 
@@ -330,7 +332,14 @@ class _MyAppState extends State<MyApp> {
 
                     if (args != null && args.containsKey('itemId')) {
                       final String itemId = args['itemId'] as String;
-                      return ShopItemSingleView(itemId: itemId);
+                      final DateTime selectedStartDate =
+                          args['selectedStartDate'] as DateTime;
+                      final DateTime selectedEndDate = args['selectedEndDate']
+                          as DateTime; // Initialize selectedDay with the first day.
+                      return ShopItemSingleView(
+                          selectedEndDate: selectedEndDate,
+                          selectedStartDate: selectedStartDate,
+                          itemId: itemId);
                     } else {
                       // Handle missing or invalid arguments
                       return const SizedBox.shrink();
@@ -343,6 +352,8 @@ class _MyAppState extends State<MyApp> {
                         return const AdminHomeView();
                       } else {
                         return HomeView(
+                          startDate: DateTime.now(),
+                          endDate: DateTime.now().add(const Duration(days: 1)),
                           currentIndex: 0,
                         );
                       }

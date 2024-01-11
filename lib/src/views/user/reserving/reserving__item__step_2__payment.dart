@@ -252,10 +252,10 @@ class _ReservingItemStep2State extends State<ReservingItemStep2> {
                   Reservation newReservation = Reservation(
                     userID: widget.user.id,
                     itemID: widget.item.itemID,
-                    startDate: DateFormat('dd MMMM y HH:mm')
+                    startDate: DateFormat('dd-mm-y HH:mm')
                         .format(widget.startDateTime),
-                    endDate: DateFormat('dd MMMM y HH:mm')
-                        .format(widget.endDateTime),
+                    endDate:
+                        DateFormat('dd-mm-y HH:mm').format(widget.endDateTime),
                     status: "Reserved",
                   );
 

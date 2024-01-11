@@ -1,3 +1,6 @@
+import 'package:Leenloket/src/utils/datetime_utils.dart';
+import 'package:firebase_database/firebase_database.dart';
+
 class Item {
   final String itemID;
   final String itemName;
@@ -42,5 +45,37 @@ class Item {
       'LockerID': lockerID,
       'ImageUrl': imageUrl,
     };
+  }
+
+  //Check availability of an item, given the start and end date
+  Future<bool> isAvailable(DateTime startDate, DateTime endDate) async {
+    bool isAvailable = true;
+    //Get all reservations from this day forwards
+    late DatabaseReference reservationRef =
+        FirebaseDatabase.instance.ref('Reservations');
+
+    DataSnapshot snapshot = await reservationRef.get();
+
+    //For each reservation, check if start date and end date is within the reservation
+
+    if (snapshot.exists) {
+      Map<dynamic, dynamic> values = snapshot.value as Map;
+      values.forEach((key, value) {
+        DateTime reservationStartDate =
+            parseFormattedDayAndTime(value['StartDate'].toString());
+        DateTime reservationEndDate =
+            parseFormattedDayAndTime(value['EndDate'].toString());
+
+        //If reservation conflicts with the start and end date, then item is not available
+        if ((startDate.isAfter(reservationStartDate) &&
+                startDate.isBefore(reservationEndDate)) ||
+            (endDate.isAfter(reservationStartDate) &&
+                endDate.isBefore(reservationEndDate))) {
+          isAvailable = false;
+        }
+      });
+    }
+
+    return isAvailable;
   }
 }

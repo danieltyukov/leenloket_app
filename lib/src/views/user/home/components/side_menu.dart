@@ -55,7 +55,10 @@ class _SideMenuState extends State<SideMenu> {
             ),
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => HomeView(currentIndex: 0)))
+                  builder: (context) => HomeView(
+                      startDate: DateTime.now(),
+                      endDate: DateTime.now().add(const Duration(days: 1)),
+                      currentIndex: 0)))
             },
           ),
           ListTile(
@@ -69,7 +72,10 @@ class _SideMenuState extends State<SideMenu> {
             ),
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => HomeView(currentIndex: 1)))
+                  builder: (context) => HomeView(
+                      startDate: DateTime.now(),
+                      endDate: DateTime.now().add(const Duration(days: 1)),
+                      currentIndex: 1)))
             },
           ),
           ListTile(
@@ -98,6 +104,8 @@ class _SideMenuState extends State<SideMenu> {
             onTap: () => {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => HomeView(
+                        startDate: DateTime.now(),
+                        endDate: DateTime.now().add(const Duration(days: 1)),
                         currentIndex: 3,
                       )))
             },

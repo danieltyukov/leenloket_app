@@ -2,6 +2,7 @@ import 'package:Leenloket/src/utils/rive_utils.dart';
 import 'package:Leenloket/src/views/user/favorites/user__favorites__index.dart';
 import 'package:Leenloket/src/views/user/home/components/animated_bar.dart';
 import 'package:Leenloket/src/views/user/home/components/side_menu.dart';
+import 'package:Leenloket/src/views/user/home/home__tab__view.dart';
 import 'package:Leenloket/src/views/user/profile/user__profile.dart';
 import 'package:Leenloket/src/views/user/settings/settings_controller.dart';
 import 'package:Leenloket/src/views/user/settings/settings_service.dart';
@@ -12,6 +13,7 @@ import 'package:Leenloket/src/views/user/reservations/user__reservations__index.
 import 'package:Leenloket/src/views/user/shop/shop__index_view.dart';
 import 'package:Leenloket/src/views/user/shop/shop__item__single_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:rive/rive.dart';
 import '../settings/settings_view.dart';
 
@@ -19,11 +21,16 @@ import '../settings/settings_view.dart';
 class HomeView extends StatefulWidget {
   HomeView({
     required this.currentIndex,
+    required this.endDate,
+    required this.startDate,
     super.key,
   });
 
   int currentIndex = 0;
   static const routeName = '/home';
+
+  final DateTime startDate;
+  final DateTime endDate;
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -49,7 +56,10 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      HomePageView(),
+      HomePageView(
+        initialStartDate: widget.startDate,
+        initialEndDate: widget.endDate,
+      ),
       const SampleItemListView(),
       const UserFavoriteItems(),
       const UserProfileView(),
@@ -119,74 +129,6 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
         ));
-  }
-}
-
-class HomePageView extends StatelessWidget {
-  HomePageView({
-    super.key,
-  });
-
-  final ref = FirebaseDatabase.instance.ref('Items');
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 20),
-              Container(
-                color: Colors.transparent,
-                height: 250,
-                child: FirebaseAnimatedList(
-                  query: ref.orderByChild('Status').equalTo('Available'),
-                  itemBuilder: (context, snapshot, animation, index) {
-                    if (snapshot.child('Status').value.toString() ==
-                        'Available') {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (context) =>
-                                  ShopItemSingleView(itemId: snapshot.key!)));
-                        },
-                        child: Card(
-                          child: ListTile(
-                            leading: Container(
-                              width: 80, // Set your desired width
-                              height: 60, // Set your desired height
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    snapshot.child('ImageUrl').value.toString(),
-                                placeholder: (context, url) =>
-                                    const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    const Icon(Icons.error),
-                                fit: BoxFit
-                                    .cover, // Ensures the image covers the container
-                              ),
-                            ),
-                            title: Text(
-                                snapshot.child('ItemName').value.toString()),
-                            subtitle: Text(
-                                "€${snapshot.child('PricePerDay').value} per day"),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return Container();
-                    }
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }
 
