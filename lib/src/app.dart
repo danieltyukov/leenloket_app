@@ -9,11 +9,7 @@ import 'package:Leenloket/src/views/admin/users/admin__users__index.dart';
 import 'package:Leenloket/src/views/authentication/auth__onboarding_view.dart';
 import 'package:Leenloket/src/views/user/credit/user__credit__view.dart';
 import 'package:Leenloket/src/views/user/favorites/user__favorites__index.dart';
-import 'package:Leenloket/src/views/user/reserving/reserving__item__step_0__credentials.dart';
-import 'package:Leenloket/src/views/user/reserving/reserving__item__step_1__period.dart';
-import 'package:Leenloket/src/views/user/reserving/reserving__item__step_1b__period.dart';
-import 'package:Leenloket/src/views/user/reserving/reserving__item__step_1c__period.dart';
-import 'package:Leenloket/src/views/user/reserving/reserving__item__step_1d__period.dart';
+import 'package:Leenloket/src/views/user/reserving/reserving__item__step_1__credentials.dart';
 import 'package:Leenloket/src/views/user/reserving/reserving__item__step_2__payment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -176,26 +172,6 @@ class _MyAppState extends State<MyApp> {
                             return const SizedBox.shrink();
                           }
 
-                        case ReservingItemStep0.routeName:
-                          // Extract itemId from route arguments
-                          final Map<String, dynamic>? args =
-                              routeSettings.arguments as Map<String, dynamic>?;
-
-                          if (args != null &&
-                              args.containsKey('item') &&
-                              args.containsKey('user')) {
-                            final Item item = args['item'] as Item;
-                            final userModel.User user =
-                                args['user'] as userModel.User;
-                            return ReservingItemStep0(
-                              user: user,
-                              item: item,
-                            );
-                          } else {
-                            // Handle missing or invalid arguments
-                            return const SizedBox.shrink();
-                          }
-
                         case ReservingItemStep1.routeName:
                           // Extract itemId from route arguments
                           final Map<String, dynamic>? args =
@@ -203,89 +179,22 @@ class _MyAppState extends State<MyApp> {
 
                           if (args != null &&
                               args.containsKey('item') &&
-                              args.containsKey('user')) {
-                            final Item item = args['item'] as Item;
-                            final userModel.User user =
-                                args['user'] as userModel.User;
-                            return ReservingItemStep1(
-                              user: user,
-                              item: item,
-                            );
-                          } else {
-                            // Handle missing or invalid arguments
-                            return const SizedBox.shrink();
-                          }
-
-                        case ReservingItemStep1b.routeName:
-                          // Extract itemId from route arguments
-                          final Map<String, dynamic>? args =
-                              routeSettings.arguments as Map<String, dynamic>?;
-
-                          if (args != null &&
-                              args.containsKey('item') &&
                               args.containsKey('user') &&
-                              args.containsKey('startDate')) {
+                              args.containsKey('startDate') &&
+                              args.containsKey('endDate')) {
                             final Item item = args['item'] as Item;
                             final userModel.User user =
                                 args['user'] as userModel.User;
                             final DateTime startDate =
                                 args['startDate'] as DateTime;
-                            return ReservingItemStep1b(
-                              user: user,
-                              item: item,
-                              startDate: startDate,
-                            );
-                          } else {
-                            // Handle missing or invalid arguments
-                            return const SizedBox.shrink();
-                          }
-
-                        case ReservingItemStep1c.routeName:
-                          // Extract itemId from route arguments
-                          final Map<String, dynamic>? args =
-                              routeSettings.arguments as Map<String, dynamic>?;
-
-                          if (args != null &&
-                              args.containsKey('item') &&
-                              args.containsKey('user') &&
-                              args.containsKey('startDateTime')) {
-                            final Item item = args['item'] as Item;
-                            final userModel.User user =
-                                args['user'] as userModel.User;
-                            final DateTime startDateTime =
-                                args['startDateTime'] as DateTime;
-                            return ReservingItemStep1c(
-                              user: user,
-                              item: item,
-                              startDateTime: startDateTime,
-                            );
-                          } else {
-                            // Handle missing or invalid arguments
-                            return const SizedBox.shrink();
-                          }
-
-                        case ReservingItemStep1d.routeName:
-                          // Extract itemId from route arguments
-                          final Map<String, dynamic>? args =
-                              routeSettings.arguments as Map<String, dynamic>?;
-
-                          if (args != null &&
-                              args.containsKey('item') &&
-                              args.containsKey('user') &&
-                              args.containsKey('startDateTime') &&
-                              args.containsKey('endDate')) {
-                            final Item item = args['item'] as Item;
-                            final userModel.User user =
-                                args['user'] as userModel.User;
-                            final DateTime startDateTime =
-                                args['startDateTime'] as DateTime;
                             final DateTime endDate =
                                 args['endDate'] as DateTime;
-                            return ReservingItemStep1d(
+
+                            return ReservingItemStep1(
+                              startDate: startDate,
+                              endDate: endDate,
                               user: user,
                               item: item,
-                              startDateTime: startDateTime,
-                              endDate: endDate,
                             );
                           } else {
                             // Handle missing or invalid arguments
@@ -300,13 +209,15 @@ class _MyAppState extends State<MyApp> {
                           if (args != null &&
                               args.containsKey('item') &&
                               args.containsKey('user') &&
-                              args.containsKey('start') &&
-                              args.containsKey('end')) {
+                              args.containsKey('startDateTime') &&
+                              args.containsKey('endDateTime')) {
                             final Item item = args['item'] as Item;
                             final userModel.User user =
                                 args['user'] as userModel.User;
-                            final DateTime start = args['start'] as DateTime;
-                            final DateTime end = args['end'] as DateTime;
+                            final DateTime start =
+                                args['startDateTime'] as DateTime;
+                            final DateTime end =
+                                args['endDateTime'] as DateTime;
                             return ReservingItemStep2(
                               user: user,
                               item: item,

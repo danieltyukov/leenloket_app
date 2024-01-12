@@ -1,6 +1,6 @@
 import 'package:Leenloket/src/models/item_model.dart';
 import 'package:Leenloket/src/utils/datetime_utils.dart';
-import 'package:Leenloket/src/views/user/reserving/reserving__item__step_0__credentials.dart';
+import 'package:Leenloket/src/views/user/reserving/reserving__item__step_1__credentials.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:Leenloket/src/models/user_model.dart' as UserModel;
@@ -89,7 +89,7 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
     fetchCategory(widget.itemId);
     startDate = widget.selectedStartDate;
     endDate = widget.selectedEndDate;
-    next7Days = generateNext7Days(DateTime.now());
+    next7Days = generateNext7Days(startDate);
     next7EndDays = generateNext7Days(startDate);
     selectedDay = next7Days[0];
     selectedEndDay = next7EndDays[0];
@@ -304,7 +304,7 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                                                   ],
                                                 ),
                                                 Text(
-                                                  "${startDate.day} ${getMonthNameShort(startDate.month)} ${startDate.hour}:${startDate.minute}",
+                                                  "${startDate.day} ${getMonthNameShort(startDate.month)} ${startDate.hour}:${startDate.minute.toString().padLeft(2, '0')}",
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -339,7 +339,7 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                                                   ],
                                                 ),
                                                 Text(
-                                                  "${endDate.day} ${getMonthNameShort(endDate.month)} ${endDate.hour}:${endDate.minute}",
+                                                  "${endDate.day} ${getMonthNameShort(endDate.month)} ${endDate.hour}:${endDate.minute.toString().padLeft(2, '0')}",
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
@@ -449,7 +449,11 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                                                     Navigator.of(context).push(
                                                         MaterialPageRoute(
                                                             builder: (context) =>
-                                                                ReservingItemStep0(
+                                                                ReservingItemStep1(
+                                                                    startDate:
+                                                                        startDate,
+                                                                    endDate:
+                                                                        endDate,
                                                                     item:
                                                                         currentItem,
                                                                     user: widget

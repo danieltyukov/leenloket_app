@@ -120,7 +120,7 @@ class _HomePageViewState extends State<HomePageView> {
                             ],
                           ),
                           Text(
-                            "${startDate.day} ${getMonthNameShort(startDate.month)} ${startDate.hour}:${startDate.minute}",
+                            "${startDate.day} ${getMonthNameShort(startDate.month)} ${startDate.hour}:${startDate.minute.toString().padLeft(2, '0')}",
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -153,7 +153,7 @@ class _HomePageViewState extends State<HomePageView> {
                             ],
                           ),
                           Text(
-                            "${endDate.day} ${getMonthNameShort(endDate.month)} ${endDate.hour}:${endDate.minute}",
+                            "${endDate.day} ${getMonthNameShort(endDate.month)} ${endDate.hour}:${endDate.minute.toString().padLeft(2, '0')}",
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
