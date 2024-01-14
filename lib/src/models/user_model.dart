@@ -246,7 +246,6 @@ class User {
       'Status': reservation.status,
     }).then((reservation) => {
           dbRefCodes.push().set({
-            "Code": "QRCODEHERE",
             "PINCode": "$reservationCode",
             "ReservationID": newReservationRef.key,
           }),
