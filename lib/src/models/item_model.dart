@@ -57,22 +57,24 @@ class Item {
 
     DataSnapshot snapshot = await reservationRef.get();
 
-    //For each reservation, check if start date and end date is within the reservation
+    //For each reservation of this item, check if start date and end date is within the reservation
 
     if (snapshot.exists) {
       Map<dynamic, dynamic> values = snapshot.value as Map;
       values.forEach((key, value) {
-        DateTime reservationStartDate =
-            parseFormattedDayAndTime(value['StartDate'].toString());
-        DateTime reservationEndDate =
-            parseFormattedDayAndTime(value['EndDate'].toString());
+        if (value['ItemID'] == itemID) {
+          DateTime reservationStartDate =
+              parseFormattedDayAndTime(value['StartDate'].toString());
+          DateTime reservationEndDate =
+              parseFormattedDayAndTime(value['EndDate'].toString());
 
-        //If reservation conflicts with the start and end date, then item is not available
-        if ((startDate.isAfter(reservationStartDate) &&
-                startDate.isBefore(reservationEndDate)) ||
-            (endDate.isAfter(reservationStartDate) &&
-                endDate.isBefore(reservationEndDate))) {
-          isAvailable = false;
+          //If reservation conflicts with the start and end date, then item is not available
+          if ((startDate.isAfter(reservationStartDate) &&
+                  startDate.isBefore(reservationEndDate)) ||
+              (endDate.isAfter(reservationStartDate) &&
+                  endDate.isBefore(reservationEndDate))) {
+            isAvailable = false;
+          }
         }
       });
     }
