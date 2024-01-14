@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,6 +43,17 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyARR033aiPUAJB165QTnjsR45pj1U2m_GU',
+    appId: '1:1039865739935:web:ca8741cde6c9a2e32080aa',
+    messagingSenderId: '1039865739935',
+    projectId: 'tue-leenloket',
+    authDomain: 'tue-leenloket.firebaseapp.com',
+    databaseURL: 'https://tue-leenloket-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'tue-leenloket.appspot.com',
+    measurementId: 'G-FBLNEFNWZR',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBl4ViK8bFd2QZdCn6h_CP6qrnHw_Jpz0g',
     appId: '1:1039865739935:android:bc6cd49534a74add2080aa',
@@ -65,6 +70,20 @@ class DefaultFirebaseOptions {
     projectId: 'tue-leenloket',
     databaseURL: 'https://tue-leenloket-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'tue-leenloket.appspot.com',
+    androidClientId: '1039865739935-7nol9u7gjd36kgn09hejejm3h586vu6p.apps.googleusercontent.com',
+    iosClientId: '1039865739935-n0cbu7p4prevhqgd14k182gse2q665ri.apps.googleusercontent.com',
     iosBundleId: 'com.example.leenloketApp',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCT51KwrpWonVij2fSSBLLjpUu92IeOx_Q',
+    appId: '1:1039865739935:ios:5b30598c770e56372080aa',
+    messagingSenderId: '1039865739935',
+    projectId: 'tue-leenloket',
+    databaseURL: 'https://tue-leenloket-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'tue-leenloket.appspot.com',
+    androidClientId: '1039865739935-7nol9u7gjd36kgn09hejejm3h586vu6p.apps.googleusercontent.com',
+    iosClientId: '1039865739935-igv9545r9e7l3sf5vjjq3qctsrn755mg.apps.googleusercontent.com',
+    iosBundleId: 'com.example.leenloketApp.RunnerTests',
   );
 }

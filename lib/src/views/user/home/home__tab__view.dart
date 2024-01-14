@@ -5,6 +5,7 @@ import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:Leenloket/src/utils/datetime_utils.dart';
 import 'package:Leenloket/src/models/user_model.dart' as UserModel;
+import 'package:intl/intl.dart';
 
 class HomePageView extends StatefulWidget {
   HomePageView({
@@ -57,13 +58,13 @@ class _HomePageViewState extends State<HomePageView> {
     super.initState();
     startDate = widget.initialStartDate;
     endDate = widget.initialEndDate;
-    next7Days = generateNext7Days(DateTime.now());
-    next7EndDays = generateNext7Days(startDate);
-    selectedDay = next7Days[0];
-    selectedEndDay = next7EndDays[0];
+    next7Days = generateNext7Days(startDate);
+    next7EndDays = generateNext7Days(endDate);
+    selectedDay = DateFormat('EEEE DD MMMM y').format(startDate);
+    selectedEndDay = DateFormat('EEEE DD MMMM y').format(endDate);
     timeList = generateTimeList();
-    selectedTime = timeList[0];
-    selectedEndTime = timeList[0];
+    selectedTime = DateFormat('HH:mm').format(startDate);
+    selectedEndTime = DateFormat('HH:mm').format(endDate);
   }
 
   @override

@@ -4,6 +4,7 @@ import 'package:Leenloket/src/views/user/reserving/reserving__item__step_1__cred
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:Leenloket/src/models/user_model.dart' as UserModel;
+import 'package:intl/intl.dart';
 
 /// Displays detailed information about a SampleItem.
 class ShopItemSingleView extends StatefulWidget {
@@ -89,13 +90,13 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
     fetchCategory(widget.itemId);
     startDate = widget.selectedStartDate;
     endDate = widget.selectedEndDate;
-    next7Days = generateNext7Days(startDate);
-    next7EndDays = generateNext7Days(startDate);
-    selectedDay = next7Days[0];
-    selectedEndDay = next7EndDays[0];
+    next7Days = generateNext7Days(widget.selectedStartDate);
+    next7EndDays = generateNext7Days(widget.selectedEndDate);
+    selectedDay = DateFormat('EEEE DD MMMM y').format(startDate);
+    selectedEndDay = DateFormat('EEEE DD MMMM y').format(endDate);
     timeList = generateTimeList();
-    selectedTime = timeList[0];
-    selectedEndTime = timeList[0];
+    selectedTime = DateFormat('HH:mm').format(startDate);
+    selectedEndTime = DateFormat('HH:mm').format(endDate);
   }
 
   @override
@@ -522,8 +523,7 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                               children: [
                                 Expanded(
                                   child: ListView.builder(
-                                    itemCount: generateNext7Days(DateTime.now())
-                                        .length,
+                                    itemCount: next7Days.length,
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
                                         onTap: () {
@@ -627,8 +627,7 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                               children: [
                                 Expanded(
                                   child: ListView.builder(
-                                    itemCount: generateNext7Days(DateTime.now())
-                                        .length,
+                                    itemCount: next7EndDays.length,
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
                                         onTap: () {
@@ -639,7 +638,7 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                                         },
                                         child: ListTile(
                                           title: Text(
-                                            next7Days[index],
+                                            next7EndDays[index],
                                             style: TextStyle(
                                               color: selectedEndDay ==
                                                       next7EndDays[index]
@@ -688,7 +687,7 @@ class _ShopItemSingleView extends State<ShopItemSingleView> {
                           // Get date, month, year, hour and minute from selected date and time in separate variables
                           DateTime newEndDate = combineDateAndTime(
                               parseFormattedDay(selectedEndDay),
-                              selectedEndDay);
+                              selectedEndTime);
 
                           // Update the state with the new start date
                           updateEndDate(newEndDate);

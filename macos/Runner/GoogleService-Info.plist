@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1039865739935-igv9545r9e7l3sf5vjjq3qctsrn755mg.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1039865739935-igv9545r9e7l3sf5vjjq3qctsrn755mg</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1039865739935-7nol9u7gjd36kgn09hejejm3h586vu6p.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCT51KwrpWonVij2fSSBLLjpUu92IeOx_Q</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1039865739935</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.leenloketApp.RunnerTests</string>
+	<key>PROJECT_ID</key>
+	<string>tue-leenloket</string>
+	<key>STORAGE_BUCKET</key>
+	<string>tue-leenloket.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1039865739935:ios:5b30598c770e56372080aa</string>
+	<key>DATABASE_URL</key>
+	<string>https://tue-leenloket-default-rtdb.europe-west1.firebasedatabase.app</string>
+</dict>
+</plist>

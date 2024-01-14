@@ -45,6 +45,9 @@ class _MyAppState extends State<MyApp> {
   var isLoggedIn = false;
   late userModel.User currentUser;
   String userRole = "r2";
+  //Get current time, rounded to the nearest hour
+  DateTime now = DateTime.now();
+  late DateTime roundedNow;
 
   Future<userModel.User> getUser() async {
     final uid = FirebaseAuth.instance.currentUser!.uid;
@@ -64,7 +67,19 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    getInitialDateTime();
     super.initState();
+  }
+
+  //Generate initial DateTime, rounded to the nearest hour, only if the current time is between 06:00 and 22:00, otherwise return the next day at 06:00
+  void getInitialDateTime() {
+    roundedNow = DateTime(now.year, now.month, now.day, now.hour);
+    print(roundedNow.hour >= 6 && roundedNow.hour < 22);
+    if (roundedNow.hour >= 6 && roundedNow.hour < 22) {
+      roundedNow = roundedNow;
+    } else {
+      roundedNow = DateTime(now.year, now.month, now.day + 1, 06);
+    }
   }
 
   @override
@@ -147,9 +162,8 @@ class _MyAppState extends State<MyApp> {
                         case HomeView.routeName:
                           return HomeView(
                             currentUser: currentUser,
-                            startDate: DateTime.now(),
-                            endDate:
-                                DateTime.now().add(const Duration(days: 1)),
+                            startDate: roundedNow,
+                            endDate: roundedNow.add(const Duration(days: 1)),
                             currentIndex: 0,
                           );
 
@@ -292,9 +306,9 @@ class _MyAppState extends State<MyApp> {
                             } else {
                               return HomeView(
                                 currentUser: currentUser,
-                                startDate: DateTime.now(),
+                                startDate: roundedNow,
                                 endDate:
-                                    DateTime.now().add(const Duration(days: 1)),
+                                    roundedNow.add(const Duration(days: 1)),
                                 currentIndex: 0,
                               );
                             }

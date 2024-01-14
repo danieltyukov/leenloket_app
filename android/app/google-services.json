@@ -13,7 +13,20 @@
           "package_name": "com.example.leenloket_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1039865739935-7nol9u7gjd36kgn09hejejm3h586vu6p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.leenloket_app",
+            "certificate_hash": "3f3b61bb0decb8304473d25fd60d36502e353c43"
+          }
+        },
+        {
+          "client_id": "1039865739935-5gqgj4hqhedj03gbp94m6ff3hps45orj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBl4ViK8bFd2QZdCn6h_CP6qrnHw_Jpz0g"
@@ -21,7 +34,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1039865739935-5gqgj4hqhedj03gbp94m6ff3hps45orj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1039865739935-igv9545r9e7l3sf5vjjq3qctsrn755mg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.leenloketApp.RunnerTests"
+              }
+            }
+          ]
         }
       }
     }
