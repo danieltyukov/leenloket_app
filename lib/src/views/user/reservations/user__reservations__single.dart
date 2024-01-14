@@ -43,7 +43,7 @@ class _ReservationsSingle extends State<ReservationsSingle> {
       Map<dynamic, dynamic> values = snapshot.value as Map;
       values.forEach((key, value) {
         if (value['ReservationID'] == reservationId) {
-          code = value['PINCode'];
+          code = value['ReservationID'];
         }
       });
     }
