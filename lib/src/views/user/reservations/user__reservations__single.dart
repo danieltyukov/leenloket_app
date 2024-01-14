@@ -19,6 +19,7 @@ class _ReservationsSingle extends State<ReservationsSingle> {
   final _codesRef = FirebaseDatabase.instance.ref('Codes');
   final _itemsRef = FirebaseDatabase.instance.ref('Items');
   String _code = '';
+  String _resID = '';
   String _itemName = '';
   String _itemDescription = '';
 
@@ -38,18 +39,21 @@ class _ReservationsSingle extends State<ReservationsSingle> {
   Future<void> fetchCode(String reservationId) async {
     DataSnapshot snapshot = await _codesRef.get();
     String code = '';
+    String resID = '';
 
     if (snapshot.exists) {
       Map<dynamic, dynamic> values = snapshot.value as Map;
       values.forEach((key, value) {
         if (value['ReservationID'] == reservationId) {
-          code = value['ReservationID'];
+          code = value['PINCode'];
+          resID = value['ReservationID'];
         }
       });
     }
 
     setState(() {
       _code = code;
+      _resID = resID;
     });
   }
 
@@ -120,7 +124,7 @@ class _ReservationsSingle extends State<ReservationsSingle> {
                   height: 50,
                 ),
                 QrImageView(
-                  data: _code,
+                  data: _resID,
                   version: QrVersions.auto,
                   size: 200.0,
                 ),
