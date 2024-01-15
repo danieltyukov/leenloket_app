@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
   late DateTime roundedNow;
 
   Future<userModel.User> getUser() async {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final uid = FirebaseAuth.instance.currentUser?.uid;
     final ref = FirebaseDatabase.instance.ref("Users/$uid");
     final snapshot = await ref.get();
 

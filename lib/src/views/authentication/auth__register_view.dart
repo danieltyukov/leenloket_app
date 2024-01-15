@@ -39,7 +39,7 @@ class AuthRegisterView extends StatelessWidget {
 
         creditRef.push().set({
           'UserID': firebaseUser.uid,
-          'Credit': 0.0,
+          'Credit': "0.00",
         });
 
         Navigator.of(context).pushReplacementNamed(OnboardingView.routeName);
