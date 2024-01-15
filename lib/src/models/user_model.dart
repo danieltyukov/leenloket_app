@@ -238,11 +238,17 @@ class User {
 
     int reservationCode = createReservationCode();
 
+    //Generate DateTime in the format of yyyy-MM-dd HH:mm:ss, where ss is always 00
+    String newStartDate =
+        "${reservation.startDate.toString().substring(0, 16)}:00";
+
+    String newEndDate = "${reservation.endDate.toString().substring(0, 16)}:00";
+
     await newReservationRef.set({
       'UserID': reservation.userID,
       'ItemID': reservation.itemID,
-      'StartDate': reservation.startDate,
-      'EndDate': reservation.endDate,
+      'StartDate': newStartDate,
+      'EndDate': newEndDate,
       'Status': reservation.status,
     }).then((reservation) => {
           dbRefCodes.push().set({
