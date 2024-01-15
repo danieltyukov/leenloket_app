@@ -76,7 +76,7 @@ class _MyAppState extends State<MyApp> {
     roundedNow = DateTime(now.year, now.month, now.day, now.hour);
     print(roundedNow.hour >= 6 && roundedNow.hour < 22);
     if (roundedNow.hour >= 6 && roundedNow.hour < 22) {
-      roundedNow = roundedNow;
+      roundedNow = DateTime(now.year, now.month, now.day, now.hour + 1);
     } else {
       roundedNow = DateTime(now.year, now.month, now.day + 1, 06);
     }
