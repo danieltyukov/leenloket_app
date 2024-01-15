@@ -721,10 +721,6 @@ class ProductTileWithImage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            const Text("Subtitel",
-                style: TextStyle(
-                  color: Colors.white,
-                )),
             Text(currentItem.itemName,
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                     color: Colors.white, fontWeight: FontWeight.bold)),

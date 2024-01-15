@@ -66,13 +66,6 @@ class _UserProfileViewState extends State<UserProfileView> {
               const SizedBox(
                 height: 20,
               ),
-              CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.red.withOpacity(0.4),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
               FutureBuilder(
                   future: getUser(),
                   builder: (context, AsyncSnapshot<UserModel.User> snapshot) {
@@ -80,11 +73,21 @@ class _UserProfileViewState extends State<UserProfileView> {
                       return Column(
                         children: [
                           Text(
-                            currentUser.email,
+                            currentUser.name,
                             style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
+                          ),
+                          Text(
+                            currentUser.email,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
                           ),
                           FutureBuilder(
                               future: currentUser.fetchDoubleCredit(),

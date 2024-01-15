@@ -170,7 +170,7 @@ class _HomePageViewState extends State<HomePageView> {
               const SizedBox(height: 20),
               Container(
                 color: Colors.transparent,
-                height: 250,
+                height: 500,
                 child: FirebaseAnimatedList(
                   query: ref.orderByChild('Status').equalTo('Available'),
                   itemBuilder: (context, snapshot, animation, index) {
@@ -202,9 +202,19 @@ class _HomePageViewState extends State<HomePageView> {
                               ),
                             ),
                             title: Text(
-                                snapshot.child('ItemName').value.toString()),
+                              snapshot.child('ItemName').value.toString(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red,
+                              ),
+                            ),
                             subtitle: Text(
-                                "€${snapshot.child('PricePerDay').value} per day"),
+                              "€${snapshot.child('PricePerDay').value} per day",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                color: Colors.indigo.shade900,
+                              ),
+                            ),
                           ),
                         ),
                       );
