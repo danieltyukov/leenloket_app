@@ -6,7 +6,7 @@ int createReservationCode() {
   int randomNumber = random.nextInt(9999);
 
   FirebaseDatabase.instance.ref('Codes/$randomNumber').get().then((value) {
-    if (value.exists) {
+    if (value.exists || randomNumber.toString().length != 4) {
       createReservationCode();
     }
   });
