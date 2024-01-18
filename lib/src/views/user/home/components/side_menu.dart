@@ -20,6 +20,8 @@ class SideMenu extends StatefulWidget {
 
 class _SideMenuState extends State<SideMenu> {
   late SettingsController _settingsController;
+  DateTime now = DateTime.now();
+  late DateTime roundedNow;
 
   @override
   void initState() {
@@ -28,6 +30,17 @@ class _SideMenuState extends State<SideMenu> {
     _settingsController = SettingsController(SettingsService());
     // Load settings when the widget is initialized
     _settingsController.loadSettings();
+    getInitialDateTime();
+  }
+
+  void getInitialDateTime() {
+    roundedNow = DateTime(now.year, now.month, now.day, now.hour);
+    print(roundedNow.hour >= 6 && roundedNow.hour < 22);
+    if (roundedNow.hour >= 6 && roundedNow.hour < 22) {
+      roundedNow = DateTime(now.year, now.month, now.day, now.hour + 1);
+    } else {
+      roundedNow = DateTime(now.year, now.month, now.day + 1, 06);
+    }
   }
 
   @override
@@ -63,8 +76,8 @@ class _SideMenuState extends State<SideMenu> {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => HomeView(
                       currentUser: widget.currentUser,
-                      startDate: DateTime.now(),
-                      endDate: DateTime.now().add(const Duration(days: 1)),
+                      startDate: roundedNow,
+                      endDate: roundedNow.add(const Duration(days: 1)),
                       currentIndex: 0)))
             },
           ),
@@ -81,8 +94,8 @@ class _SideMenuState extends State<SideMenu> {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => HomeView(
                       currentUser: widget.currentUser,
-                      startDate: DateTime.now(),
-                      endDate: DateTime.now().add(const Duration(days: 1)),
+                      startDate: roundedNow,
+                      endDate: roundedNow.add(const Duration(days: 1)),
                       currentIndex: 1)))
             },
           ),
@@ -113,8 +126,8 @@ class _SideMenuState extends State<SideMenu> {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => HomeView(
                         currentUser: widget.currentUser,
-                        startDate: DateTime.now(),
-                        endDate: DateTime.now().add(const Duration(days: 1)),
+                        startDate: roundedNow,
+                        endDate: roundedNow.add(const Duration(days: 1)),
                         currentIndex: 3,
                       )))
             },

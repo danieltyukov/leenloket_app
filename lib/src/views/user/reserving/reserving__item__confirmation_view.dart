@@ -20,6 +20,26 @@ class ReservingItemConfirmation extends StatefulWidget {
 }
 
 class _ReservingItemConfirmationState extends State<ReservingItemConfirmation> {
+  DateTime now = DateTime.now();
+  late DateTime roundedNow;
+
+  void getInitialDateTime() {
+    roundedNow = DateTime(now.year, now.month, now.day, now.hour);
+    print(roundedNow.hour >= 6 && roundedNow.hour < 22);
+    if (roundedNow.hour >= 6 && roundedNow.hour < 22) {
+      roundedNow = DateTime(now.year, now.month, now.day, now.hour + 1);
+    } else {
+      roundedNow = DateTime(now.year, now.month, now.day + 1, 06);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Instantiate SettingsController in initState
+    getInitialDateTime();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -98,8 +118,8 @@ class _ReservingItemConfirmationState extends State<ReservingItemConfirmation> {
                                       builder: (context) => HomeView(
                                           currentUser: widget.currentUser,
                                           currentIndex: 0,
-                                          startDate: DateTime.now(),
-                                          endDate: DateTime.now()
+                                          startDate: roundedNow,
+                                          endDate: roundedNow
                                               .add(const Duration(days: 1))),
                                     ),
                                   );
@@ -111,7 +131,16 @@ class _ReservingItemConfirmationState extends State<ReservingItemConfirmation> {
                                         fontWeight: FontWeight.bold)),
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ReservationsSingle(
+                                          reservationId: "1",
+                                          currentUser: widget.currentUser),
+                                    ),
+                                  );
+                                },
                                 child: const Text('Reservations'),
                                 style: ElevatedButton.styleFrom(
                                     textStyle: const TextStyle(
