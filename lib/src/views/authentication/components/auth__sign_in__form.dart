@@ -18,6 +18,8 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
+  DateTime now = DateTime.now();
+  late DateTime roundedNow;
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final emailController = TextEditingController();
@@ -63,8 +65,8 @@ class _SignInFormState extends State<SignInForm> {
               MaterialPageRoute(
                 builder: (context) => HomeView(
                     currentIndex: 0,
-                    endDate: DateTime.now(),
-                    startDate: DateTime.now(),
+                    endDate: roundedNow.add(const Duration(days: 1)),
+                    startDate: roundedNow,
                     currentUser: user),
               ),
             );
@@ -78,6 +80,22 @@ class _SignInFormState extends State<SignInForm> {
           isShowLoading = false;
         });
       });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getInitialDateTime();
+  }
+
+  void getInitialDateTime() {
+    roundedNow = DateTime(now.year, now.month, now.day, now.hour);
+    print(roundedNow.hour >= 6 && roundedNow.hour < 22);
+    if (roundedNow.hour >= 6 && roundedNow.hour < 22) {
+      roundedNow = DateTime(now.year, now.month, now.day, now.hour + 1);
+    } else {
+      roundedNow = DateTime(now.year, now.month, now.day + 1, 06);
     }
   }
 
