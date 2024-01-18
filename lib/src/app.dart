@@ -249,10 +249,14 @@ class _MyAppState extends State<MyApp> {
                               routeSettings.arguments as Map<String, dynamic>?;
 
                           if (args != null &&
-                              args.containsKey('reservationId')) {
+                              args.containsKey('reservationId') &&
+                              args.containsKey('currentUser')) {
                             final String reservationId =
                                 args['reservationId'] as String;
+                            final userModel.User currentUser =
+                                args['currentUser'] as userModel.User;
                             return ReservationsSingle(
+                                currentUser: currentUser,
                                 reservationId: reservationId);
                           } else {
                             // Handle missing or invalid arguments

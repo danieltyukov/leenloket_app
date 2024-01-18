@@ -97,6 +97,7 @@ class _UserReservationsIndex extends State<UserReservationsIndex> {
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ReservationsSingle(
+                              currentUser: widget.currentUser,
                               reservationId: snapshot.key!)));
                     },
                     child: Card(

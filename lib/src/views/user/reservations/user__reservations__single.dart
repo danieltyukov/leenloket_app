@@ -2,12 +2,15 @@ import 'package:Leenloket/src/views/user/reservations/user__reservations__index.
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:Leenloket/src/models/user_model.dart' as UserModel;
 
 /// Displays detailed information about a SampleItem.
 class ReservationsSingle extends StatefulWidget {
-  final String reservationId;
+  const ReservationsSingle(
+      {super.key, required this.reservationId, required this.currentUser});
 
-  const ReservationsSingle({super.key, required this.reservationId});
+  final String reservationId;
+  final UserModel.User currentUser;
 
   static const routeName = '/reservations/single';
   @override
@@ -160,10 +163,13 @@ class _ReservationsSingle extends State<ReservationsSingle> {
                                         'Status': 'Cancelled',
                                       });
                                       Navigator.of(context).pop();
-                                      Navigator.restorablePushNamed(
-                                          context,
-                                          UserReservationsIndex
-                                              .routeName); // Close the dialog
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UserReservationsIndex(
+                                                    currentUser:
+                                                        widget.currentUser,
+                                                  ))); // Close the dialog
                                     },
                                     child: const Text('Confirm'),
                                   ),
