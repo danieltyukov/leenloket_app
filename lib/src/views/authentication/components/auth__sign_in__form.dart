@@ -57,9 +57,16 @@ class _SignInFormState extends State<SignInForm> {
           }
 
           if (user.roleID == "r2") {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-              HomeView.routeName,
-              (route) => false,
+            // ignore: use_build_context_synchronously
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomeView(
+                    currentIndex: 0,
+                    endDate: DateTime.now(),
+                    startDate: DateTime.now(),
+                    currentUser: user),
+              ),
             );
           }
         }

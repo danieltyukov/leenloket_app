@@ -260,7 +260,7 @@ class _ReservingItemStep1State extends State<ReservingItemStep1> {
                                             fontWeight: FontWeight.w500,
                                             color: Colors.black)),
                                     Text(
-                                        "€${widget.item.pricePerDay * widget.endDate.difference(widget.startDate).inDays}",
+                                        "€${int.parse(widget.item.pricePerDay) * widget.endDate.difference(widget.startDate).inDays}",
                                         style: const TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w400,

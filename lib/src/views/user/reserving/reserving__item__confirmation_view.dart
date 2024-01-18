@@ -1,4 +1,5 @@
 import 'package:Leenloket/src/models/reservation_model.dart';
+import 'package:Leenloket/src/views/user/reservations/user__reservations__index.dart';
 import 'package:Leenloket/src/views/user/reservations/user__reservations__single.dart';
 import 'package:flutter/material.dart';
 import 'package:Leenloket/src/views/user/home/home_view.dart';
@@ -135,9 +136,9 @@ class _ReservingItemConfirmationState extends State<ReservingItemConfirmation> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ReservationsSingle(
-                                          reservationId: "1",
-                                          currentUser: widget.currentUser),
+                                      builder: (context) =>
+                                          UserReservationsIndex(
+                                              currentUser: widget.currentUser),
                                     ),
                                   );
                                 },

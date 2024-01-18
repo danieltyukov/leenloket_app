@@ -76,8 +76,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                         GestureDetector(
                           onTap: () {
                             _btnAnimationController.isActive = true;
-                            Future.delayed(const Duration(milliseconds: 800),
-                                () {
+                            Future.delayed(const Duration(milliseconds: 0), () {
                               setState(() {
                                 isSignInDialogOpen = true;
                               });
