@@ -162,6 +162,7 @@ class _ReservationsSingle extends State<ReservationsSingle> {
                                       _reservationRef.update({
                                         'Status': 'Cancelled',
                                       });
+
                                       Navigator.of(context).pop();
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
